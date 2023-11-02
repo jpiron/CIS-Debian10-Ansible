@@ -1034,6 +1034,7 @@
     state: present
     reload: true
     sysctl_set: true
+    create: true
   tags:
     - section1
     - level_1_server
