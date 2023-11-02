@@ -719,7 +719,7 @@
     #   shell: nft chain inet filter INPUT { ip protocol icmp accept \;}
     - name: 3.5.3.6 Ensure default deny firewall policy - enable "{{ item.desc }}"
       shell: nft add rule inet filter INPUT "{{ item.rule }}"
-      with_items: "{{ list_of_rules_to_allow }}"
+      with_items: "{{ list_of_rules_to_allow | default([]) }}"
     - name: 3.5.3.6 Ensure default deny firewall policy - input
       shell: nft chain inet filter INPUT { policy drop \; }
     - name: 3.5.3.6 Ensure default deny firewall policy - forward
