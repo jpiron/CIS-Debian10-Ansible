@@ -198,10 +198,18 @@
 # If an entry for /tmp exists in /etc/fstab it will take precedence over entries in the
 # tmp.mount file.
 - name: 1.1.2 Ensure /tmp is configured
-  assert:
-    that: ansible_mounts | byattr('mount', '/tmp') | list | length > 0
-    fail_msg: "/tmp is NOT a separate partition"
-    success_msg: "/tmp is a separate partition"
+  block:
+    - name: Check /tmp mount point
+      shell: df --output=target | grep '/tmp$'
+      register: tmp_mount_result
+      ignore_errors: yes
+      changed_when: false
+      
+    - name: Check if /tmp is a separate partition
+      assert:
+        that: tmp_mount_result | length > 0
+        fail_msg: "/tmp is NOT a separate partition"
+        success_msg: "/tmp is a separate partition"
   tags:
     - section1
     - level_1_server
