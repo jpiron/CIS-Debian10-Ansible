@@ -6,7 +6,7 @@ grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nolo
     else
         dirperm=$(ls -ld $dir | cut -f1 -d" ")
         if [ $(echo $dirperm | cut -c6) != "-" ]; then
-            echo "$dir" >/tmp/.6.2.8
+            echo "$dir" >>/tmp/.6.2.8
         fi
         if [ $(echo $dirperm | cut -c8) != "-" ]; then
             echo "$dir" >>/tmp/.6.2.8
