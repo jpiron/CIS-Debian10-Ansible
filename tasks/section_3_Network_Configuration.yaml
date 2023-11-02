@@ -592,7 +592,7 @@
     rule: "{{ item.rule }}"
     port: "{{ item.port }}"
     proto: "{{ item.proto }}"
-  with_items: "{{ list_of_rules_to_allow }}"
+  with_items: "{{ list_of_rules_to_allow | default([]) }}"
   tags:
     - section3
     - level_1_server
