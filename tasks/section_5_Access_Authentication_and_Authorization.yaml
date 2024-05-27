@@ -661,14 +661,16 @@
 # Locking out user IDs after n unsuccessful consecutive login attempts mitigates brute force
 # password attacks against your systems.
 - name: 5.3.2 Ensure lockout for failed password attempts is configured
+  vars:
+    pam_module_name: "{{ 'pam_tally2.so' if ansible_distribution | lower == 'debian' and ansible_distribution_major_version is version('11', '<') else 'pam_faillock.so' }}"
   block:
     - name: 5.3.2 Ensure lockout for failed password attempts is configured - common-auth
       lineinfile:
         dest: /etc/pam.d/common-auth
-        line: "auth required pam_tally2.so onerr=fail audit silent deny=5 unlock_time=900"
+        line: "auth required {{ pam_module_name }} onerr=fail audit silent deny=5 unlock_time=900"
         state: present
         create: true
-        
+
     - name: 5.3.2 Ensure lockout for failed password attempts is configured - pam_deny.so
       lineinfile:
         dest: /etc/pam.d/common-account
@@ -676,15 +678,15 @@
         line: "account requisite pam_deny.so"
         state: present
         create: true
-        
-    - name: 5.3.2 Ensure lockout for failed password attempts is configured - pam_tally2.so
+
+    - name: 5.3.2 Ensure lockout for failed password attempts is configured
       lineinfile:
         dest: /etc/pam.d/common-account
         regexp: '^account\srequired'
-        line: "account required pam_tally2.so"
+        line: "account required {{ pam_module_name }}"
         state: present
         create: true
-        
+
   tags:
     - section5
     - level_1_server
