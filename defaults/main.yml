@@ -36,6 +36,7 @@ remoteSyslog:
   protocol: tcp
 logrotate_policy: "daily"
 
+debian10cis_python_executable: python
 
 # Section 5 Settings
 # 5.2.18 Ensure SSH access is limited
