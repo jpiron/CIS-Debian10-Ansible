@@ -39,8 +39,8 @@ deploy-hardening-archive:
 
     # Upload the archive to Nexus
     - |
-      curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" --upload-file $ARCHIVE_NAME \
-      "https://${NEXUS_URL}/repository/raw-hosted/hardening/${ARCHIVE_NAME}"
+      curl -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" --upload-file "${ARCHIVE_NAME}" "https://${NEXUS_URL}/repository/raw-hosted/hardening/${ARCHIVE_NAME}"
+
   artifacts:
     paths: 
       - "*.tar.gz"
