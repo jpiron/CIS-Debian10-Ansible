@@ -37,9 +37,13 @@ deploy-hardening-archive:
     # Create .tar.gz archive of the repository content excluding this CI config file
     - tar -czvf $ARCHIVE_NAME defaults facts files filter_plugins handlers meta tasks templates
 
+    - TARGET_URL=https://$NEXUS_URL/repository/raw-hosted/hardening/$ARCHIVE_NAME
+
+    - echo $TARGET_URL
+
     # Upload the archive to Nexus
     - |
-      curl -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" --upload-file "${ARCHIVE_NAME}" "https://${NEXUS_URL}/repository/raw-hosted/hardening/${ARCHIVE_NAME}"
+      curl -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" --upload-file $ARCHIVE_NAME $TARGET_URL
 
   artifacts:
     paths: 
