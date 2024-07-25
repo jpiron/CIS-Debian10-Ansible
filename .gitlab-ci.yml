@@ -1,0 +1,42 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH # Only trigger pipeline on master branch
+
+variables:
+  VAULT_ADDRESS: https://vault.tag:8200
+  VAULT_SKIP_VERIFY: "true"
+
+stages:
+  - deploy
+
+deploy-hardening-archive:
+  stage: deploy
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://gitlab.com
+  variables:
+    NEXUS_URL: nexus.tag
+    NEXUS_USERNAME: securite
+    VAULT_AUTH_ROLE: gitlab-ci-nexus
+  script:
+    - apt-get update -qy
+    - apt-get install -y curl jq --no-install-recommends
+
+    # Fetch Vault token using Vault's API
+    - |
+      VAULT_TOKEN=$(curl --request POST --insecure \
+        --data '{"jwt": "'"$VAULT_ID_TOKEN"'", "role": "'"$VAULT_AUTH_ROLE"'"}' \
+        ${VAULT_ADDRESS}/v1/auth/jwt/login | jq -r .auth.client_token)
+
+    # Fetch Nexus account password using Vault's API
+    - |
+      NEXUS_PASSWORD=$(curl --header "X-Vault-Token: $VAULT_TOKEN" --insecure \
+        ${VAULT_ADDRESS}/v1/secret/infra/services/nexus/instances/nexus.tag/users/securite | jq -r '.data."password"')
+
+    # Create .tar.gz archive of the repository content
+    - tar -czf archive.tar.gz .
+
+    # Upload the archive to Nexus
+    - |
+      curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" --upload-file archive.tar.gz \
+      "https://${NEXUS_URL}/repository/raw-hosted/hardening/archive.tar.gz"
