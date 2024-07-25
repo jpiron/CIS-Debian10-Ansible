@@ -5,6 +5,8 @@ workflow:
 variables:
   VAULT_ADDRESS: https://vault.tag:8200
   VAULT_SKIP_VERIFY: "true"
+  NEXUS_URL: https://nexus.tag
+  NEXUS_USERNAME: securite
 
 stages:
   - deploy
@@ -15,8 +17,6 @@ deploy-hardening-archive:
     VAULT_ID_TOKEN:
       aud: https://gitlab.com
   variables:
-    NEXUS_URL: nexus.tag
-    NEXUS_USERNAME: securite
     VAULT_AUTH_ROLE: gitlab-ci-nexus
     ARCHIVE_NAME: hardening.tar.gz
   script:
