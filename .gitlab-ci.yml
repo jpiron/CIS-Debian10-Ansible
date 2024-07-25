@@ -34,7 +34,7 @@ deploy-hardening-archive:
         ${VAULT_ADDRESS}/v1/secret/infra/services/nexus/instances/nexus.tag/users/securite | jq -r '.data."password"')
 
     # Create .tar.gz archive of the repository content excluding this CI config file
-    - tar --exclude='.gitlab-ci.yml' -czf archive.tar.gz .
+    - tar --exclude='./.gitlab-ci.yml' -czf hardening.tar.gz .
 
     # Upload the archive to Nexus
     - |
