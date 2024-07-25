@@ -35,7 +35,7 @@ deploy-hardening-archive:
         ${VAULT_ADDRESS}/v1/secret/infra/services/nexus/instances/nexus.tag/users/securite | jq -r '.data."password"')
 
     # Create .tar.gz archive of the repository content excluding this CI config file
-    - tar -czvf $ARCHIVE_NAME /defaults /facts /files /filter_plugins /handlers /meta /tasks /templates
+    - tar -czvf $ARCHIVE_NAME defaults facts files filter_plugins handlers meta tasks templates
 
     # Upload the archive to Nexus
     - |
