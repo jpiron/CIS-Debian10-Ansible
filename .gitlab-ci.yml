@@ -32,7 +32,7 @@ deploy-hardening-archive:
     # Fetch Nexus account password using Vault's API
     - |
       NEXUS_PASSWORD=$(curl --header "X-Vault-Token: $VAULT_TOKEN" --insecure \
-        ${VAULT_ADDRESS}/v1/secret/infra/services/nexus/instances/${NEXUS_URL}/users/securite | jq -r '.data."password"')
+        ${VAULT_ADDRESS}/v1/secret/infra/services/nexus/instances/nexus.tag/users/securite | jq -r '.data."password"')
 
     # Create .tar.gz archive of the repository content excluding this CI config file
     - tar -czvf $ARCHIVE_NAME /defaults /facts /files /filter_plugins /handlers /meta /tasks /templates
