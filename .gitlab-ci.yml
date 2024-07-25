@@ -18,6 +18,7 @@ deploy-hardening-archive:
     NEXUS_URL: nexus.tag
     NEXUS_USERNAME: securite
     VAULT_AUTH_ROLE: gitlab-ci-nexus
+    ARCHIVE_NAME: hardening.tar.gz
   script:
     - apt-get update -qy
     - apt-get install -y curl jq --no-install-recommends
@@ -31,12 +32,15 @@ deploy-hardening-archive:
     # Fetch Nexus account password using Vault's API
     - |
       NEXUS_PASSWORD=$(curl --header "X-Vault-Token: $VAULT_TOKEN" --insecure \
-        ${VAULT_ADDRESS}/v1/secret/infra/services/nexus/instances/nexus.tag/users/securite | jq -r '.data."password"')
+        ${VAULT_ADDRESS}/v1/secret/infra/services/nexus/instances/${NEXUS_URL}/users/securite | jq -r '.data."password"')
 
     # Create .tar.gz archive of the repository content excluding this CI config file
-    - tar --exclude='./.gitlab-ci.yml' -czf hardening.tar.gz .
+    - tar -czvf $ARCHIVE_NAME /defaults /facts /files /filter_plugins /handlers /meta /tasks /templates
 
     # Upload the archive to Nexus
     - |
-      curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" --upload-file archive.tar.gz \
-      "https://${NEXUS_URL}/repository/raw-hosted/hardening/archive.tar.gz"
+      curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" --upload-file $ARCHIVE_NAME \
+      "https://${NEXUS_URL}/repository/raw-hosted/hardening/${ARCHIVE_NAME}"
+  artifacts:
+    paths: 
+      - "*.tar.gz"
