@@ -22,18 +22,20 @@ deploy-hardening-archive:
     - apt-get update -qy
     - apt-get install -y curl jq --no-install-recommends
 
-    # Fetch Vault token using Vault API
+     # Fetch Vault token using Vault API
     - |
       NEXUS_VAULT_TOKEN=$(curl --request POST --insecure \
         --data '{"jwt": "'"$VAULT_ID_TOKEN"'", "role": "gitlab-ci-nexus"}' \
         ${VAULT_ADDRESS}/v1/auth/jwt/login | jq -r .auth.client_token)
 
-      echo $VAULT_TOKEN | cut -c 1-3
+      echo $NEXUS_VAULT_TOKEN | cut -c 1-5
 
-    # Fetch Nexus account password using Vault's API
+    # Fetch Nexus account password using Vault API
     - |
-      NEXUS_PASSWORD=$(curl --header "X-Vault-Token: $VAULT_TOKEN" --insecure \
+      NEXUS_PASSWORD=$(curl --header "X-Vault-Token: $NEXUS_VAULT_TOKEN" --insecure \
         ${VAULT_ADDRESS}/v1/secret/infra/services/nexus/instances/nexus.tag/users/securite | jq -r '.data."password"')
+
+      echo $NEXUS_PASSWORD | cut -c 1-5
 
     # Create .tar.gz archive of the repository content excluding this CI config file
     - tar -czvf $ARCHIVE_NAME defaults facts files filter_plugins handlers meta tasks templates
