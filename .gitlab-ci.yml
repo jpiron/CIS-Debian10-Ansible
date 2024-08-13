@@ -17,16 +17,15 @@ deploy-hardening-archive:
     VAULT_ID_TOKEN:
       aud: https://gitlab.com
   variables:
-    VAULT_AUTH_ROLE: gitlab-ci-nexus
     ARCHIVE_NAME: hardening.tar.gz
   script:
     - apt-get update -qy
     - apt-get install -y curl jq --no-install-recommends
 
-    # Fetch Vault token using Vault's API
+    # Fetch Vault token using Vault API
     - |
-      VAULT_TOKEN=$(curl --request POST --insecure \
-        --data '{"jwt": "'"$VAULT_ID_TOKEN"'", "role": "'"$VAULT_AUTH_ROLE"'"}' \
+      NEXUS_VAULT_TOKEN=$(curl --request POST --insecure \
+        --data '{"jwt": "'"$VAULT_ID_TOKEN"'", "role": "gitlab-ci-nexus"}' \
         ${VAULT_ADDRESS}/v1/auth/jwt/login | jq -r .auth.client_token)
 
       echo $VAULT_TOKEN | cut -c 1-3
