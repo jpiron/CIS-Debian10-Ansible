@@ -11,8 +11,9 @@ variables:
 stages:
   - deploy
 
-deploy-hardening-archive:
+deploy-hardening:
   stage: deploy
+  image: docker.tag/debian-12-hardened:0.0.0
   id_tokens:
     VAULT_ID_TOKEN:
       aud: https://gitlab.com
