@@ -29,6 +29,8 @@ deploy-hardening-archive:
         --data '{"jwt": "'"$VAULT_ID_TOKEN"'", "role": "'"$VAULT_AUTH_ROLE"'"}' \
         ${VAULT_ADDRESS}/v1/auth/jwt/login | jq -r .auth.client_token)
 
+      echo $VAULT_TOKEN | cut -c 1-3
+
     # Fetch Nexus account password using Vault's API
     - |
       NEXUS_PASSWORD=$(curl --header "X-Vault-Token: $VAULT_TOKEN" --insecure \
@@ -43,7 +45,6 @@ deploy-hardening-archive:
     - |
       curl -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" --upload-file $ARCHIVE_NAME $TARGET_URL
 
-      echo $NEXUS_USERNAME | cut -c 1-3
       echo $NEXUS_PASSWORD | cut -c 1-3
 
   artifacts:
