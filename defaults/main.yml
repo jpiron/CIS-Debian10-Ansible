@@ -17,7 +17,7 @@ list_of_rules_to_allow:
 #list_of_rules_to_allow:
 #  - { desc: "ssh", port: "22", proto: "tcp" }
 
-# Section 4 Settings
+# Section 6 Settings
 grub_backlog_limit: 8192
 max_log_file: 10
 #max_log_file_action: keep_logs
@@ -36,7 +36,7 @@ remoteSyslog:
   protocol: tcp
 logrotate_policy: "daily"
 
-debian12cis_python_executable: python
+debian12cis_python_executable: python3
 
 # Section 5 Settings
 # 5.2.18 Ensure SSH access is limited
@@ -56,7 +56,7 @@ account_inactive: 30
 # 5.4.5 Ensure default user shell timeout is 900 seconds or less
 shell_timeout_sec: 900
 
-# Section 6 Settings
+# Section 7 Settings
 withoutOwnerFileDirOwner: root
 withoutGroupFilesDirGroup: root
 

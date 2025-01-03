@@ -10,6 +10,7 @@
 
 import os
 import json
+from typing import List
 
 ##
 # get_file_content
@@ -18,8 +19,9 @@ import json
 # default - the default return
 # strip - strip out whitespace
 ##
-def get_file_content(path, default=None, strip=True):
+def get_file_content(path, default=None, strip=True) -> str | None:
     data = default
+
     if os.path.exists(path) and os.access(path, os.R_OK):
         try:
             try:
@@ -33,43 +35,51 @@ def get_file_content(path, default=None, strip=True):
                 datafile.close()
         except:
             pass
+
     return data
 
 ##
 # get_mtab_entries
 # gets the mtab entries to use
 ##
-def get_mtab_entries():
-
+def get_mtab_entries() -> List:
     mtab_file = '/etc/mtab'
+
     if not os.path.exists(mtab_file):
         mtab_file = '/proc/mounts'
 
     mtab = get_file_content(mtab_file, '')
     mtab_entries = []
+
     for line in mtab.splitlines():
         fields = line.split()
+
         if len(fields) < 4:
             continue
+
         mtab_entries.append(fields)
+
     return mtab_entries
 
 ## Main ##
+def main():
+    mtab_entries = get_mtab_entries()
 
-mtab_entries = get_mtab_entries()
+    mounts = []
 
-mounts = []
+    for fields in mtab_entries:
+        device, mount, fstype, options = fields[0], fields[1], fields[2], fields[3]
 
-for fields in mtab_entries:
-    device, mount, fstype, options = fields[0], fields[1], fields[2], fields[3]
+        mount_info = {
+            'mount': mount,
+            'device': device,
+            'fstype': fstype,
+            'options': options
+        }
 
-    mount_info = {
-        'mount': mount,
-        'device': device,
-        'fstype': fstype,
-        'options': options
-    }
+        mounts.append(mount_info)
 
-    mounts.append(mount_info)
+    print(json.dumps(mounts))
 
-print(json.dumps(mounts))
+if __name__ == "__main__":
+    main()
