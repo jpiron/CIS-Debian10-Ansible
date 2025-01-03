@@ -1,9 +1,27 @@
 ---
-# 6 System Maintenance
-# 6.1 System File Permission
-# 6.1.1 Audit system file permissions
-# It is important to confirm that packaged system files and directories are maintained with
-# the permissions they were intended to have from the OS vendor.
+# 6.1.1 Ensure AIDE is installed
+# AIDE takes a snapshot of filesystem state including modification times, permissions, and
+# file hashes which can then be used to compare against the current state of the filesystem to
+# detect modifications to the system.
+- name: 6.1.1 Ensure AIDE is installed
+  block:
+    - name: 6.1.1 Ensure AIDE is installed
+      apt:
+        name: ["nullmailer", "aide-common", "aide"]
+        state: present
+        install_recommends: false
+    - name: 6.1.1 Configure AIDE as appropriate for your environment - aideinit
+      command: aideinit
+    - name: 6.1.1 Configure AIDE as appropriate for your environment - aideinit db
+      shell: |
+        mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.1
+    - scored
+  when: debian12cis_rules_6_1_1
 - name: 6.1.1 Audit system file permissions
   block:
     - name: 6.1.1 Audit system file permissions
@@ -20,6 +38,31 @@
     - 6.1.1
     - not-scored
   when: debian12cis_rules_6_1_1
+# 6.1.2 Ensure filesystem integrity is regularly checked
+# Periodic checking of the filesystem integrity is needed to detect changes to the filesystem.
+# Periodic file checking allows the system administrator to determine on a regular basis if critical files have been changed in an unauthorized fashion.
+- name: 6.1.2 Ensure filesystem integrity is regularly checked
+  block:
+    - name: Unmask dailyaidecheck.timer and dailyaidecheck.service
+      systemd:
+        name: "{{ item }}"
+        state: unmasked
+      loop:
+        - dailyaidecheck.timer
+        - dailyaidecheck.service
+
+    - name: Enable and start dailyaidecheck.timer
+      systemd:
+        name: dailyaidecheck.timer
+        enabled: yes
+        state: started
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.2
+    - scored
+  when: debian12cis_rules_6_1_2
 # 6.1.2 Ensure permissions on /etc/passwd are configured
 # The /etc/passwd file contains user account information that is used by many system
 # utilities and therefore must be readable for these utilities to operate.

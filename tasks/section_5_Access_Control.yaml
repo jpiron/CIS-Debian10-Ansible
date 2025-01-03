@@ -240,6 +240,25 @@
     - 5.2.2
     - scored
   when: debian12cis_rules_5_2_2
+# 5.2.3 Ensure sudo log file exists
+# sudo can use a custom log file.
+# A sudo log file simplifies auditing of sudo commands.
+- name: 5.2.3 Ensure sudo log file exists
+  lineinfile:
+    dest: /etc/sudoers.d/cis
+    state: present
+    create: yes
+    regexp: "^Defaults logfile.*"
+    line: 'Defaults logfile="/var/log/sudo.log"'
+    validate: "visudo -cf %s"
+    mode: "0660"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.2.3
+    - scored
+  when: debian12cis_rules_5_2_3
 # 5.2.3 Ensure permissions on SSH public host key files are configured
 # If a public host key file is modified by an unauthorized user, the SSH service may be
 # compromised.
