@@ -138,7 +138,7 @@
       file:
         path: /etc/cron.deny
         state: absent
-      ignore_errors: yes
+      ignore_errors: true
     - stat:
         path: /etc/cron.allow
       register: output_5_1_8_callow
@@ -159,7 +159,7 @@
         path: /etc/at.deny
         state: absent
       when: output_5_1_8_dpkg.rc == 0
-      ignore_errors: yes
+      ignore_errors: true
     - stat:
         path: /etc/at.allow
       register: output_5_1_8_atallow
@@ -947,7 +947,7 @@
     - name: 5.5 Ensure root login is restricted to system console - print output
       debug:
         msg: "{{ output_5_5 }}"
-  ignore_errors: yes
+  ignore_errors: true
   tags:
     - section5
     - level_1_server
