@@ -39,7 +39,7 @@ deploy-hardening:
 
     - TARGET_URL=$NEXUS_URL/repository/raw-hosted/hardening/$ARCHIVE_NAME
 
-    - echo $TARGET_URL
+    - echo $TARGET_URL, $NEXUS_VAULT_TOKEN
 
     # Upload the archive to Nexus
     - |
