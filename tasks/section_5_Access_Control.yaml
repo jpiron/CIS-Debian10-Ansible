@@ -196,6 +196,23 @@
     - 5.2.1
     - scored
   when: debian12cis_rules_5_2_1
+# 5.2.2 Ensure sudo commands use pty
+# sudo can be configured to run only from a pseudo-pty
+- name: 5.2.2 Ensure sudo commands use pty
+  lineinfile:
+    dest: /etc/sudoers.d/cis
+    state: present
+    create: yes
+    regexp: "^Defaults use_pty"
+    line: "Defaults use_pty"
+    validate: "visudo -cf %s"
+  tags:
+    - section5
+    - level_5_server
+    - level_5_workstation
+    - 5.2.2
+    - scored
+  when: debian12cis_rules_5_2_2
 # 5.2.2 Ensure permissions on SSH private host key files are configured
 # If an unauthorized user obtains the private SSH host key file, the host could be
 # impersonated
