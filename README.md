@@ -1,12 +1,8 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/dbernaci/CIS-Debian10-Ansible/master/files/header.png">
-</div>
+# Ansible CIS Debian 12 Hardening
 
+## Purpose
 
-Ansible CIS Debian 10 Hardening [![Build Status](https://travis-ci.com/dbernaci/CIS-Debian10-Ansible.svg?branch=main)](https://travis-ci.com/dbernaci/CIS-Debian10-Ansible)
-=========
-
-Configure Debian 10 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant. 
+Configure Debian 12 machines to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant. 
 
 Note: this role will make changes to the system that could break things. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
 
@@ -49,7 +45,7 @@ ansible-playbook -i host run.yaml --list-tags
 
 Based on
 ```Text
-CIS Debian Linux 10 Benchmark
+CIS Debian Linux 12 Benchmark
 v1.0.0 - 02-13-2020
 ```
 
@@ -87,7 +83,7 @@ Examples of config that should be immediately considered for exclusion:
 
 **For example:**
 
-* CIS-Debian10-Ansible/defaults/main.yml
+* CIS-Debian12-Ansible/defaults/main.yml
 ```YAML
 
 #Section 5
@@ -122,7 +118,7 @@ Below an example of a playbook
   remote_user: root
   gather_facts: yes
   roles:
-    - { role: "CIS-Debian10-Ansible",}
+    - { role: "CIS-Debian12-Ansible",}
 ```
 
 ### Run all
