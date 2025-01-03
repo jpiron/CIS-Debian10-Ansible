@@ -1,19 +1,19 @@
 ---
-# 1.1.1.1 Ensure mounting of freevxfs filesystems is disabled
-# The freevxfs filesystem type is a free version of the Veritas type filesystem. This is the
-# primary filesystem type for HP-UX operating systems.
-- name: 1.1.1.1 Ensure mounting of freevxfs filesystems is disabled
+# 1.1.1.1 Ensure cramfs kernel module is not available
+# The cramfs filesystem type is a compressed read-only Linux filesystem embedded in small footprint systems. 
+# A cramfs image can be used without having to first decompress the image.
+- name: 1.1.1.1 Ensure cramfs kernel module is not available
   block:
-    - name: 1.1.1.1 Ensure mounting of freevxfs filesystems is disabled
+    - name: 1.1.1.1 Ensure cramfs kernel module is not available
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install freevxfs"
-        line: "install freevxfs /bin/true"
+        regexp: "^(#)?install cramfs"
+        line: "install cramfs /bin/true"
         state: present
         create: true
-    - name: 1.1.1.1 Ensure mounting of freevxfs filesystems is disabled - modprobe
+    - name: 1.1.1.1 Ensure cramfs kernel module is not available - modprobe
       modprobe:
-        name: freevxfs
+        name: cramfs
         state: absent
   tags:
     - section1
@@ -21,25 +21,25 @@
     - level_1_workstation
     - 1.1.1.1
     - filesystems
-    - freevxfs
+    - cramfs
     - modprobe
     - scored
   when: debian10cis_rules_1_1_1_1
-# 1.1.1.2  Ensure mounting of jffs2 filesystems is disabled
-# The jffs2 (journaling flash filesystem 2) filesystem type is a log-structured filesystem used
-# in flash memory devices.
-- name: 1.1.1.2 Ensure mounting of jffs2 filesystems is disabled
+# 1.1.1.2 Ensure freevxfs kernel module is not available
+# The freevxfs filesystem type is a free version of the Veritas type filesystem. This is the
+# primary filesystem type for HP-UX operating systems.
+- name: 1.1.1.2 Ensure freevxfs kernel module is not available
   block:
-    - name: 1.1.1.2 Ensure mounting of jffs2 filesystems is disabled
+    - name: 1.1.1.2 Ensure freevxfs kernel module is not available
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install jffs2(\\s|$)"
-        line: "install jffs2 /bin/true"
+        regexp: "^(#)?install freevxfs"
+        line: "install freevxfs /bin/true"
         state: present
         create: true
-    - name: 1.1.1.2 Ensure mounting of jffs2 filesystems is disabled - modprobe
+    - name: 1.1.1.2 Ensure freevxfs kernel module is not available - modprobe
       modprobe:
-        name: jffs2
+        name: freevxfs
         state: absent
   tags:
     - section1
@@ -47,23 +47,22 @@
     - level_1_workstation
     - 1.1.1.2
     - filesystems
-    - jffs2
+    - freevxfs
     - modprobe
     - scored
   when: debian10cis_rules_1_1_1_2
-# 1.1.1.3 Ensure mounting of hfs filesystems is disabled
-# The hfs filesystem type is a hierarchical filesystem that allows you to mount Mac OS
-# filesystems.
-- name: 1.1.1.3 Ensure mounting of hfs filesystems is disabled
+# 1.1.1.3 Ensure hfs kernel module is not available
+# The hfs filesystem type is a hierarchical filesystem that allows you to mount Mac OS filesystems.
+- name: 1.1.1.3 Ensure hfs kernel module is not available
   block:
-    - name: 1.1.1.3 Ensure mounting of hfs filesystems is disabled
+    - name: 1.1.1.3 Ensure hfs kernel module is not available
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install hfs(\\s|$)"
+        regexp: "^(#)?install hfs"
         line: "install hfs /bin/true"
         state: present
         create: true
-    - name: 1.1.1.3 Ensure mounting of hfs filesystems is disabled - modprobe
+    - name: 1.1.1.3 Ensure hfs kernel module is not available - modprobe
       modprobe:
         name: hfs
         state: absent
@@ -73,23 +72,22 @@
     - level_1_workstation
     - 1.1.1.3
     - filesystems
-    - modprobe
     - hfs
+    - modprobe
     - scored
   when: debian10cis_rules_1_1_1_3
-# 1.1.1.4 Ensure mounting of hfsplus filesystems is disabled
-# The hfsplus filesystem type is a hierarchical filesystem designed to replace hfs that allows
-# you to mount Mac OS filesystems.
-- name: 1.1.1.4 Ensure mounting of hfsplus filesystems is disabled
+# 1.1.1.4 Ensure hfsplus kernel module is not available
+# The hfsplus filesystem type is a hierarchical filesystem designed to replace hfs that allows you to mount Mac OS filesystems.
+- name: 1.1.1.4 Ensure hfsplus kernel module is not available
   block:
-    - name: 1.1.1.4 Ensure mounting of hfsplus filesystems is disabled
+    - name: 1.1.1.4 Ensure hfsplus kernel module is not available
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install hfsplus(\\s|$)"
+        regexp: "^(#)?install hfsplus"
         line: "install hfsplus /bin/true"
         state: present
         create: true
-    - name: 1.1.1.4 Ensure mounting of hfsplus filesystems is disabled - modprobe
+    - name: 1.1.1.4 Ensure hfsplus kernel module is not available - modprobe
       modprobe:
         name: hfsplus
         state: absent
@@ -103,22 +101,21 @@
     - modprobe
     - scored
   when: debian10cis_rules_1_1_1_4
-# 1.1.1.5 Ensure mounting of squashfs filesystems is disabled
-# The squashfs filesystem type is a compressed read-only Linux filesystem embedded in
-# small footprint systems (similar to cramfs ). A squashfs image can be used without having
-# to first decompress the image.
-- name: 1.1.1.5 Ensure mounting of squashfs filesystems is disabled
+# 1.1.1.5 Ensure jffs2 kernel module is not available
+# The jffs2 (journaling flash filesystem 2) filesystem type is a log-structured filesystem used
+# in flash memory devices.
+- name: 1.1.1.5 Ensure jffs2 kernel module is not available
   block:
-    - name: 1.1.1.5 Ensure mounting of squashfs filesystems is disabled
+    - name: 1.1.1.Ensure jffs2 kernel module is not available
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install squashfs(\\s|$)"
-        line: "install squashfs /bin/true"
+        regexp: "^(#)?install jffs2(\\s|$)"
+        line: "install jffs2 /bin/true"
         state: present
         create: true
-    - name: 1.1.1.5 Ensure mounting of squashfs filesystems is disabled - modprobe
+    - name: 1.1.1.Ensure jffs2 kernel module is not available - modprobe
       modprobe:
-        name: squashfs
+        name: jffs2
         state: absent
   tags:
     - section1
@@ -126,27 +123,26 @@
     - level_1_workstation
     - 1.1.1.5
     - filesystems
-    - squashfs
+    - jffs2
     - modprobe
     - scored
   when: debian10cis_rules_1_1_1_5
-# 1.1.1.6 Ensure mounting of udf filesystems is disabled
-# The udf filesystem type is the universal disk format used to implement ISO/IEC 13346 and
-# ECMA-167 specifications. This is an open vendor filesystem type for data storage on a
-# broad range of media. This filesystem type is necessary to support writing DVDs and newer
-# optical disc formats.
-- name: 1.1.1.6 Ensure mounting of udf filesystems is disabled
+# 1.1.1.6 Ensure mounting of squashfs filesystems is disabled
+# The squashfs filesystem type is a compressed read-only Linux filesystem embedded in
+# small footprint systems (similar to cramfs ). A squashfs image can be used without having
+# to first decompress the image.
+- name: 1.1.1.6 Ensure mounting of squashfs filesystems is disabled
   block:
-    - name: 1.1.1.6 Ensure mounting of udf filesystems is disabled
+    - name: 1.1.1.6 Ensure mounting of squashfs filesystems is disabled
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install udf(\\s|$)"
-        line: "install udf /bin/true"
+        regexp: "^(#)?install squashfs(\\s|$)"
+        line: "install squashfs /bin/true"
         state: present
         create: true
-    - name: 1.1.1.6 Ensure mounting of udf filesystems is disabled - modprobe
+    - name: 1.1.1.6 Ensure mounting of squashfs filesystems is disabled - modprobe
       modprobe:
-        name: udf
+        name: squashfs
         state: absent
   tags:
     - section1
@@ -154,40 +150,66 @@
     - level_1_workstation
     - 1.1.1.6
     - filesystems
-    - udf
+    - squashfs
     - modprobe
     - scored
   when: debian10cis_rules_1_1_1_6
-# 1.1.1.7 Ensure mounting of FAT filesystems is limited
-# The FAT filesystem format is primarily used on older windows systems and portable USB
-# drives or flash modules. It comes in three types FAT12 , FAT16 , and FAT32 all of which are
-# supported by the vfat kernel module.
-# Impact:
-# The FAT filesystem format is used by UEFI systems for the EFI boot partition. Disabling the
-# vfat module can prevent boot on UEFI systems.
-- name: 1.1.1.7 Ensure mounting of FAT filesystems is limited
+# 1.1.1.7 Ensure mounting of udf filesystems is disabled
+# The udf filesystem type is the universal disk format used to implement ISO/IEC 13346 and
+# ECMA-167 specifications. This is an open vendor filesystem type for data storage on a
+# broad range of media. This filesystem type is necessary to support writing DVDs and newer
+# optical disc formats.
+- name: 1.1.1.7 Ensure mounting of udf filesystems is disabled
   block:
-    - name: 1.1.1.7 Ensure mounting of FAT filesystems is limited
+    - name: 1.1.1.7 Ensure mounting of udf filesystems is disabled
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install vfat(\\s|$)"
-        line: "install vfat /bin/true"
+        regexp: "^(#)?install udf(\\s|$)"
+        line: "install udf /bin/true"
         state: present
         create: true
-    - name: 1.1.1.7 Ensure mounting of FAT filesystems is limited - modprobe
+    - name: 1.1.1.7 Ensure mounting of udf filesystems is disabled - modprobe
       modprobe:
-        name: vfat
+        name: udf
         state: absent
   tags:
     - section1
-    - level_2_server
-    - level_2_workstation
+    - level_1_server
+    - level_1_workstation
     - 1.1.1.7
     - filesystems
-    - fat
+    - udf
     - modprobe
-    - not-scored
+    - scored
   when: debian10cis_rules_1_1_1_7
+  # 1.1.1.8 Ensure usb-storage kernel module is not available
+# The udf filesystem type is the universal disk format used to implement ISO/IEC 13346 and
+# ECMA-167 specifications. This is an open vendor filesystem type for data storage on a
+# broad range of media. This filesystem type is necessary to support writing DVDs and newer
+# optical disc formats.
+- name: 1.1.1.8 Ensure usb-storage kernel module is not available
+  block:
+    - name: 1.1.1.8 Ensure usb-storage kernel module is not available
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install usb-storage(\\s|$)"
+        line: "install usb-storage /bin/true"
+        state: present
+        create: true
+    - name: 1.1.1.8 Ensure usb-storage kernel module is not available - modprobe
+      modprobe:
+        name: usb-storage
+        state: absent
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.1.8
+    - filesystems
+    - usb-storage
+    - modprobe
+    - scored
+  when: debian10cis_rules_1_1_1_8
 # 1.1.2 Ensure /tmp is configured
 # The /tmp directory is a world-writable directory used for temporary storage by all users
 # and some applications.
