@@ -150,290 +150,303 @@ _________________
 
 ## Table of Roles:
 
- **1 Initial Setup**
-  - 1.1 Filesystem Configuration
-  - 1.1.1 Disable unused filesystems
-  - 1.1.1.1 Ensure mounting of freevxfs filesystems is disabled (Scored)
-  - 1.1.1.2 Ensure mounting of jffs2 filesystems is disabled (Scored)
-  - 1.1.1.3 Ensure mounting of hfs filesystems is disabled (Scored)
-  - 1.1.1.4 Ensure mounting of hfsplus filesystems is disabled (Scored)
-  - 1.1.1.5 Ensure mounting of squashfs filesystems is disabled (Scored)
-  - 1.1.1.6 Ensure mounting of udf filesystems is disabled (Scored)
-  - 1.1.1.7 Ensure mounting of FAT filesystems is limited (Not Scored)
-  - 1.1.2 Ensure /tmp is configured (Scored)
-  - 1.1.3 Ensure nodev option set on /tmp partition (Scored)
-  - 1.1.4 Ensure nosuid option set on /tmp partition (Scored)
-  - 1.1.5 Ensure noexec option set on /tmp partition (Scored)
-  - 1.1.6 Ensure separate partition exists for /var (Scored).
-  - 1.1.7 Ensure separate partition exists for /var/tmp (Scored)
-  - 1.1.8 Ensure nodev option set on /var/tmp partition (Scored)
-  - 1.1.9 Ensure nosuid option set on /var/tmp partition (Scored)
-  - 1.1.10 Ensure noexec option set on /var/tmp partition (Scored)
-  - 1.1.11 Ensure separate partition exists for /var/log (Scored)
-  - 1.1.12 Ensure separate partition exists for /var/log/audit (Scored)
-  - 1.1.13 Ensure separate partition exists for /home (Scored)
-  - 1.1.14 Ensure nodev option set on /home partition (Scored)
-  - 1.1.15 Ensure nodev option set on /dev/shm partition (Scored)
-  - 1.1.16 Ensure nosuid option set on /dev/shm partition (Scored)
-  - 1.1.17 Ensure noexec option set on /dev/shm partition (Scored)
-  - 1.1.18 Ensure nodev option set on removable media partitions (Not Scored)
-  - 1.1.19 Ensure nosuid option set on removable media partitions (Not Scored)
-  - 1.1.20 Ensure noexec option set on removable media partitions (Not Scored)
-  - 1.1.21 Ensure sticky bit is set on all world-writable directories (Scored)
-  - 1.1.22 Disable Automounting (Scored)
-  - 1.1.23 Disable USB Storage (Scored)
-  - 1.2 Configure Software Updates
-  - 1.2.1 Ensure package manager repositories are configured (Not Scored)
-  - 1.2.2 Ensure GPG keys are configured (Not Scored)
-  - 1.3 Configure sudo
-  - 1.3.1 Ensure sudo is installed (Scored)
-  - 1.3.2 Ensure sudo commands use pty (Scored)
-  - 1.3.3 Ensure sudo log file exists (Scored)
-  - 1.4 Filesystem Integrity Checking
-  - 1.4.1 Ensure AIDE is installed (Scored)
-  - 1.4.2 Ensure filesystem integrity is regularly checked (Scored)
-  - 1.5 Secure Boot Settings
-  - 1.5.1 Ensure permissions on bootloader config are configured (Scored)
-  - 1.5.2 Ensure bootloader password is set (Scored)
-  - 1.5.3 Ensure authentication required for single user mode (Scored)
-  - 1.6 Additional Process Hardening
-  - 1.6.1 Ensure XD/NX support is enabled (Scored)
-  - 1.6.2 Ensure address space layout randomization (ASLR) is enabled (Scored)
-  - 1.6.3 Ensure prelink is disabled (Scored)
-  - 1.6.4 Ensure core dumps are restricted (Scored)
-  - 1.7 Mandatory Access Control
-  - 1.7.1 Configure AppArmor
-  - 1.7.1.1 Ensure AppArmor is installed (Scored)
-  - 1.7.1.2 Ensure AppArmor is enabled in the bootloader configuration (Scored)
-  - 1.7.1.3 Ensure all AppArmor Profiles are in enforce or complain mode (Scored)
-  - 1.7.1.4 Ensure all AppArmor Profiles are enforcing (Scored)
-  - 1.8 Warning Banners
-  - 1.8.1 Command Line Warning Banners
-  - 1.8.1.1 Ensure message of the day is configured properly (Scored)
-  - 1.8.1.2 Ensure local login warning banner is configured properly (Scored)
-  - 1.8.1.3 Ensure remote login warning banner is configured properly (Scored).
-  - 1.8.1.4 Ensure permissions on /etc/motd are configured (Scored)
-  - 1.8.1.5 Ensure permissions on /etc/issue are configured (Scored)
-  - 1.8.1.6 Ensure permissions on /etc/issue.net are configured (Scored)
-  - 1.8.2 Ensure GDM login banner is configured (Scored)
-  - 1.9 Ensure updates, patches, and additional security software are installed (Not Scored)
+ **1. Initial Setup**
 
-**2 Services**
-  - 2.1 inetd Services
-  - 2.1.1 Ensure xinetd is not installed (Scored)
-  - 2.1.2 Ensure openbsd-inetd is not installed (Scored)
-  - 2.2 Special Purpose Services
-  - 2.2.1 Time Synchronization
-  - 2.2.1.1 Ensure time synchronization is in use (Scored)
-  - 2.2.1.2 Ensure systemd-timesyncd is configured (Not Scored)
-  - 2.2.1.3 Ensure chrony is configured (Scored)
-  - 2.2.1.4 Ensure ntp is configured (Scored)
-  - 2.2.2 Ensure X Window System is not installed (Scored)
-  - 2.2.3 Ensure Avahi Server is not enabled (Scored)
-  - 2.2.4 Ensure CUPS is not enabled (Scored)
-  - 2.2.5 Ensure DHCP Server is not enabled (Scored)
-  - 2.2.6 Ensure LDAP server is not enabled (Scored)
-  - 2.2.7 Ensure NFS and RPC are not enabled (Scored)
-  - 2.2.8 Ensure DNS Server is not enabled (Scored)
-  - 2.2.9 Ensure FTP Server is not enabled (Scored)
-  - 2.2.10 Ensure HTTP server is not enabled (Scored)
-  - 2.2.11 Ensure email services are not enabled (Scored)
-  - 2.2.12 Ensure Samba is not enabled (Scored)
-  - 2.2.13 Ensure HTTP Proxy Server is not enabled (Scored)
-  - 2.2.14 Ensure SNMP Server is not enabled (Scored)
-  - 2.2.15 Ensure mail transfer agent is configured for local-only mode (Scored)
-  - 2.2.16 Ensure rsync service is not enabled (Scored)
-  - 2.2.17 Ensure NIS Server is not enabled (Scored)
-  - 2.3 Service Clients
-  - 2.3.1 Ensure NIS Client is not installed (Scored)
-  - 2.3.2 Ensure rsh client is not installed (Scored)
-  - 2.3.3 Ensure talk client is not installed (Scored)
-  - 2.3.4 Ensure telnet client is not installed (Scored)
-  - 2.3.5 Ensure LDAP client is not installed (Scored)
+- 1.1.1.1 Ensure cramfs kernel module is not available
+- 1.1.1.2 Ensure freevxfs kernel module is not available
+- 1.1.1.3 Ensure hfs kernel module is not available
+- 1.1.1.4 Ensure hfsplus kernel module is not available
+- 1.1.1.5 Ensure jffs2 kernel module is not available
+- 1.1.1.6 Ensure squashfs kernel module is not available
+- 1.1.1.7 Ensure udf kernel module is not available
+- 1.1.1.8 Ensure usb-storage kernel module is not available
+- 1.1.2.1.1 Ensure /tmp is a separate partition
+- 1.1.2.1.2 Ensure nodev option set on /tmp partition
+- 1.1.2.1.3 Ensure nosuid option set on /tmp partition
+- 1.1.2.1.4 Ensure noexec option set on /tmp partition
+- 1.1.2.2.1 Ensure /dev/shm is a separate partition
+- 1.1.2.2.2 Ensure nodev option set on /dev/shm partition
+- 1.1.2.2.3 Ensure nosuid option set on /dev/shm partition
+- 1.1.2.2.4 Ensure noexec option set on /dev/shm partition
+- 1.1.2.3.1 Ensure separate partition exists for /home
+- 1.1.2.3.2 Ensure nodev option set on /home partition
+- 1.1.2.3.3 Ensure nosuid option set on /home partition
+- 1.1.2.4.1 Ensure separate partition exists for /var
+- 1.1.2.4.2 Ensure nodev option set on /var partition
+- 1.1.2.4.3 Ensure nosuid option set on /var partition
+- 1.1.2.5.1 Ensure separate partition exists for /var/tmp
+- 1.1.2.5.2 Ensure nodev option set on /var/tmp partition
+- 1.1.2.5.3 Ensure nosuid option set on /var/tmp partition
+- 1.1.2.5.4 Ensure noexec option set on /var/tmp partition
+- 1.1.2.6.1 Ensure separate partition exists for /var/log
+- 1.1.2.6.2 Ensure nodev option set on /var/log partition
+- 1.1.2.6.3 Ensure nosuid option set on /var/log partition
+- 1.1.2.6.4 Ensure noexec option set on /var/log partition
+- 1.1.2.7.1 Ensure separate partition exists for /var/log/audit
+- 1.1.2.7.2 Ensure nodev option set on /var/log/audit partition
+- 1.1.2.7.3 Ensure nosuid option set on /var/log/audit partition
+- 1.1.2.7.4 Ensure noexec option set on /var/log/audit partition
+- 1.3.1.1 Ensure AppArmor is installed
+- 1.3.1.3 Ensure all AppArmor Profiles are in enforce or complain mode
+- 1.3.1.4 Ensure all AppArmor Profiles are enforcing
+- 1.4.1 Ensure bootloader password is set
+- 1.4.2 Ensure access to bootloader config is configured
+- 1.5.1 Ensure address space layout randomization is enabled
+- 1.5.2 Ensure ptrace_scope is restricted
+- 1.5.3 Ensure core dumps are restricted
+- 1.5.4 Ensure prelink is not installed
+- 1.6.1 Ensure message of the day is configured properly
+- 1.6.2 Ensure local login warning banner is configured properly
+- 1.6.3 Ensure remote login warning banner is configured properly
+- 1.6.4 Ensure access to /etc/motd is configured
+- 1.6.5 Ensure access to /etc/issue is configured
+- 1.6.6 Ensure access to /etc/issue.net is configured
+- 1.7.1 Ensure GDM is removed
+- 1.7.2 Ensure GDM login banner is configured
+- 1.7.3 Ensure GDM disable-user-list option is enabled
+- 1.7.4 Ensure GDM screen locks when the user is idle
+- 1.7.5 Ensure GDM screen locks cannot be overridden
+- 1.7.6 Ensure GDM automatic mounting of removable media is disabled
+- 1.7.7 Ensure GDM disabling automatic mounting of removable media is not overridden
+- 1.7.8 Ensure GDM autorun-never is enabled
+- 1.7.9 Ensure GDM autorun-never is not overridden
+- 1.7.10 Ensure XDCMP is not enabled
 
-**3 Network Configuration**
-  - 3.1 Disable unused network protocols and devices
-  - 3.1.1 Disable IPv6 (Not Scored)
-  - 3.1.2 Ensure wireless interfaces are disabled (Scored)
-  - 3.2 Network Parameters (Host Only)
-  - 3.2.1 Ensure packet redirect sending is disabled (Scored)
-  - 3.2.2 Ensure IP forwarding is disabled (Scored)
-  - 3.3 Network Parameters (Host and Router)
-  - 3.3.1 Ensure source routed packets are not accepted (Scored)
-  - 3.3.2 Ensure ICMP redirects are not accepted (Scored)
-  - 3.3.3 Ensure secure ICMP redirects are not accepted (Scored)
-  - 3.3.4 Ensure suspicious packets are logged (Scored)
-  - 3.3.5 Ensure broadcast ICMP requests are ignored (Scored)
-  - 3.3.6 Ensure bogus ICMP responses are ignored (Scored)
-  - 3.3.7 Ensure Reverse Path Filtering is enabled (Scored)
-  - 3.3.8 Ensure TCP SYN Cookies is enabled (Scored)
-  - 3.3.9 Ensure IPv6 router advertisements are not accepted (Scored)
-  - 3.4 Uncommon Network Protocols
-  - 3.4.1 Ensure DCCP is disabled (Scored)
-  - 3.4.2 Ensure SCTP is disabled (Scored)
-  - 3.4.3 Ensure RDS is disabled (Scored)
-  - 3.4.4 Ensure TIPC is disabled (Scored)
-  - 3.5 Firewall Configuration
-  - 3.5.1 Ensure Firewall software is installed
-  - 3.5.1.1 Ensure a Firewall package is installed (Scored)
-  - 3.5.2 Configure UncomplicatedFirewall
-  - 3.5.2.1 Ensure ufw service is enabled (Scored)
-  - 3.5.2.2 Ensure default deny firewall policy (Scored)
-  - 3.5.2.3 Ensure loopback traffic is configured (Scored)
-  - 3.5.2.4 Ensure outbound connections are configured (Not Scored)
-  - 3.5.2.5 Ensure firewall rules exist for all open ports (Scored)
-  - 3.5.3 Configure nftables
-  - 3.5.3.1 Ensure iptables are flushed (Not Scored)
-  - 3.5.3.2 Ensure a table exists (Scored)
-  - 3.5.3.3 Ensure base chains exist (Scored)
-  - 3.5.3.4 Ensure loopback traffic is configured (Scored)
-  - 3.5.3.5 Ensure outbound and established connections are configured (Not Scored)
-  - 3.5.3.6 Ensure default deny firewall policy (Scored)
-  - 3.5.3.7 Ensure nftables service is enabled (Scored)
-  - 3.5.3.8 Ensure nftables rules are permanent (Scored)
-  - 3.5.4 Configure iptables
-  - 3.5.4.1.1 Ensure default deny firewall policy (Scored)
-  - 3.5.4.1.2 Ensure loopback traffic is configured (Scored)
-  - 3.5.4.1.3 Ensure outbound and established connections are configured (Not Scored)
-  - 3.5.4.1.4 Ensure firewall rules exist for all open ports (Scored)
-  - 3.5.4.2.1 Ensure IPv6 default deny firewall policy (Scored)
-  - 3.5.4.2.2 Ensure IPv6 loopback traffic is configured (Scored)
-  - 3.5.4.2.3 Ensure IPv6 outbound and established connections are configured (Not Scored)
-  - 3.5.4.2.4 Ensure IPv6 firewall rules exist for all open ports (Not Scored)
+**2. Services**
 
-**4 Logging and Auditing**
-  - 4.1 Configure System Accounting (auditd)
-  - 4.1.1 Ensure auditing is enabled
-  - 4.1.1.1 Ensure auditd is installed (Scored)
-  - 4.1.1.2 Ensure auditd service is enabled (Scored)
-  - 4.1.1.3 Ensure auditing for processes that start prior to auditd is enabled (Scored)
-  - 4.1.1.4 Ensure audit_backlog_limit is sufficient (Scored)
-  - 4.1.2 Configure Data Retention
-  - 4.1.2.1 Ensure audit log storage size is configured (Scored)
-  - 4.1.2.2 Ensure audit logs are not automatically deleted (Scored)
-  - 4.1.2.3 Ensure system is disabled when audit logs are full (Scored)
-  - 4.1.3 Ensure events that modify date and time information are collected (Scored)
-  - 4.1.4 Ensure events that modify user/group information are collected (Scored)
-  - 4.1.5 Ensure events that modify the system's network environment are collected (Scored)
-  - 4.1.6 Ensure events that modify the system's Mandatory Access Controls are collected (Scored)
-  - 4.1.7 Ensure login and logout events are collected (Scored)
-  - 4.1.8 Ensure session initiation information is collected (Scored)
-  - 4.1.9 Ensure discretionary access control permission modification events are collected (Scored)
-  - 4.1.10 Ensure unsuccessful unauthorized file access attempts are collected (Scored)
-  - 4.1.11 Ensure use of privileged commands is collected (Scored)
-  - 4.1.12 Ensure successful file system mounts are collected (Scored)
-  - 4.1.13 Ensure file deletion events by users are collected (Scored)
-  - 4.1.14 Ensure changes to system administration scope (sudoers) is collected (Scored)
-  - 4.1.15 Ensure system administrator actions (sudolog) are collected (Scored)
-  - 4.1.16 Ensure kernel module loading and unloading is collected (Scored)
-  - 4.1.17 Ensure the audit configuration is immutable (Scored)
-  - 4.2 Configure Logging
-  - 4.2.1 Configure rsyslog
-  - 4.2.1.1 Ensure rsyslog is installed (Scored)
-  - 4.2.1.2 Ensure rsyslog Service is enabled (Scored)
-  - 4.2.1.3 Ensure logging is configured (Not Scored)
-  - 4.2.1.4 Ensure rsyslog default file permissions configured (Scored)
-  - 4.2.1.5 Ensure rsyslog is configured to send logs to a remote log host (Scored)
-  - 4.2.1.6 Ensure remote rsyslog messages are only accepted on designated log hosts. (Not Scored)
-  - 4.2.2 Configure journald
-  - 4.2.2.1 Ensure journald is configured to send logs to rsyslog (Scored)
-  - 4.2.2.2 Ensure journald is configured to compress large log files (Scored)
-  - 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk (Scored)
-  - 4.2.3 Ensure permissions on all logfiles are configured (Scored)
-  - 4.3 Ensure logrotate is configured (Not Scored)
-  - 4.4 Ensure logrotate assigns appropriate permissions (Scored)
+- 2.1.1 Ensure autofs services are not in use
+- 2.1.2 Ensure avahi daemon services are not in use
+- 2.1.3 Ensure dhcp server services are not in use
+- 2.1.4 Ensure dns server services are not in use
+- 2.1.5 Ensure dnsmasq services are not in use
+- 2.1.6 Ensure ftp server services are not in use
+- 2.1.7 Ensure ldap server services are not in use
+- 2.1.8 Ensure message access server services are not in use
+- 2.1.9 Ensure network file system services are not in use
+- 2.1.10 Ensure nis server services are not in use
+- 2.1.11 Ensure print server services are not in use
+- 2.1.12 Ensure rpcbind services are not in use
+- 2.1.13 Ensure rsync services are not in use
+- 2.1.14 Ensure samba file server services are not in use
+- 2.1.15 Ensure snmp services are not in use
+- 2.1.16 Ensure tftp server services are not in use
+- 2.1.17 Ensure web proxy server services are not in use
+- 2.1.18 Ensure web server services are not in use
+- 2.1.19 Ensure xinetd services are not in use
+- 2.1.20 Ensure X window server services are not in use
+- 2.1.21 Ensure mail transfer agent is configured for local-only mode
+- 2.2.1 Ensure NIS Client is not installed
+- 2.2.2 Ensure rsh client is not installed
+- 2.2.3 Ensure talk client is not installed
+- 2.2.4 Ensure telnet client is not installed
+- 2.2.5 Ensure ldap client is not installed
+- 2.2.6 Ensure ftp client is not installed
+- 2.3.1.1 Ensure a single time synchronization daemon is in use
+- 2.3.2.1 Ensure systemd-timesyncd configured with authorized timeserver
+- 2.3.2.2 Ensure systemd-timesyncd is enabled and running
+- 2.3.3.1 Ensure chrony is configured with authorized timeserver
+- 2.3.3.2 Ensure chrony is running as user _chrony
+- 2.3.3.3 Ensure chrony is enabled and running
+- 2.4.1.1 Ensure cron daemon is enabled and active
+- 2.4.1.2 Ensure permissions on /etc/crontab are configured
+- 2.4.1.3 Ensure permissions on /etc/cron.hourly are configured
+- 2.4.1.4 Ensure permissions on /etc/cron.daily are configured
+- 2.4.1.5 Ensure permissions on /etc/cron.weekly are configured
+- 2.4.1.6 Ensure permissions on /etc/cron.monthly are configured
+- 2.4.1.7 Ensure permissions on /etc/cron.d are configured
+- 2.4.1.8 Ensure crontab is restricted to authorized users
+- 2.4.2.1 Ensure at is restricted to authorized users
 
-**5 Access, Authentication and Authorization**
-  - 5.1 Configure cron
-  - 5.1.1 Ensure cron daemon is enabled (Scored)
-  - 5.1.2 Ensure permissions on /etc/crontab are configured (Scored)
-  - 5.1.3 Ensure permissions on /etc/cron.hourly are configured (Scored)
-  - 5.1.4 Ensure permissions on /etc/cron.daily are configured (Scored)
-  - 5.1.5 Ensure permissions on /etc/cron.weekly are configured (Scored)
-  - 5.1.6 Ensure permissions on /etc/cron.monthly are configured (Scored)
-  - 5.1.7 Ensure permissions on /etc/cron.d are configured (Scored)
-  - 5.1.8 Ensure at/cron is restricted to authorized users (Scored)
-  - 5.2 SSH Server Configuration
-  - 5.2.1 Ensure permissions on /etc/ssh/sshd_config are configured (Scored)
-  - 5.2.2 Ensure permissions on SSH private host key files are configured (Scored)
-  - 5.2.3 Ensure permissions on SSH public host key files are configured (Scored)
-  - 5.2.4 Ensure SSH Protocol is not set to 1 (Scored)
-  - 5.2.5 Ensure SSH LogLevel is appropriate (Scored)
-  - 5.2.6 Ensure SSH X11 forwarding is disabled (Scored)
-  - 5.2.7 Ensure SSH MaxAuthTries is set to 4 or less (Scored)
-  - 5.2.8 Ensure SSH IgnoreRhosts is enabled (Scored)
-  - 5.2.9 Ensure SSH HostbasedAuthentication is disabled (Scored)
-  - 5.2.10 Ensure SSH root login is disabled (Scored)
-  - 5.2.11 Ensure SSH PermitEmptyPasswords is disabled (Scored)
-  - 5.2.12 Ensure SSH PermitUserEnvironment is disabled (Scored)
-  - 5.2.13 Ensure only strong Ciphers are used (Scored)
-  - 5.2.14 Ensure only strong MAC algorithms are used (Scored)
-  - 5.2.15 Ensure only strong Key Exchange algorithms are used (Scored)
-  - 5.2.16 Ensure SSH Idle Timeout Interval is configured (Scored)
-  - 5.2.17 Ensure SSH LoginGraceTime is set to one minute or less (Scored)
-  - 5.2.18 Ensure SSH access is limited (Scored)
-  - 5.2.19 Ensure SSH warning banner is configured (Scored)
-  - 5.2.20 Ensure SSH PAM is enabled (Scored)
-  - 5.2.21 Ensure SSH AllowTcpForwarding is disabled (Scored)
-  - 5.2.22 Ensure SSH MaxStartups is configured (Scored)
-  - 5.2.23 Ensure SSH MaxSessions is limited (Scored)
-  - 5.3 Configure PAM
-  - 5.3.1 Ensure password creation requirements are configured (Scored)
-  - 5.3.2 Ensure lockout for failed password attempts is configured (Scored)
-  - 5.3.3 Ensure password reuse is limited (Scored)
-  - 5.3.4 Ensure password hashing algorithm is SHA-512 (Scored)
-  - 5.4 User Accounts and Environment
-  - 5.4.1 Set Shadow Password Suite Parameters
-  - 5.4.1.1 Ensure password expiration is days or less (Scored)
-  - 5.4.1.2 Ensure minimum days between password changes is configured (Scored)
-  - 5.4.1.3 Ensure password expiration warning days is 7 or more (Scored)
-  - 5.4.1.4 Ensure inactive password lock is 30 days or less (Scored)
-  - 5.4.1.5 Ensure all users last password change date is in the past (Scored)
-  - 5.4.2 Ensure system accounts are secured (Scored)
-  - 5.4.3 Ensure default group for the root account is GID 0 (Scored)
-  - 5.4.4 Ensure default user umask is or more restrictive (Scored)
-  - 5.4.5 Ensure default user shell timeout is seconds or less (Scored)
-  - 5.5 Ensure root login is restricted to system console (Not Scored)
-  - 5.6 Ensure access to the su command is restricted (Scored)
+**3. Network**
 
-**6 System Maintenance**
-  - 6.1 System File Permissions
-  - 6.1.1 Audit system file permissions (Not Scored)
-  - 6.1.2 Ensure permissions on /etc/passwd are configured (Scored)
-  - 6.1.3 Ensure permissions on /etc/gshadow- are configured (Scored)
-  - 6.1.4 Ensure permissions on /etc/shadow are configured (Scored)
-  - 6.1.5 Ensure permissions on /etc/group are configured (Scored)
-  - 6.1.6 Ensure permissions on /etc/passwd- are configured (Scored)
-  - 6.1.7 Ensure permissions on /etc/shadow- are configured (Scored)
-  - 6.1.8 Ensure permissions on /etc/group- are configured (Scored)
-  - 6.1.9 Ensure permissions on /etc/gshadow are configured (Scored)
-  - 6.1.10 Ensure no world writable files exist (Scored)
-  - 6.1.11 Ensure no unowned files or directories exist (Scored)
-  - 6.1.12 Ensure no ungrouped files or directories exist (Scored)
-  - 6.1.13 Audit SUID executables (Not Scored)
-  - 6.1.14 Audit SGID executables (Not Scored)
-  - 6.2 User and Group Settings
-  - 6.2.1 Ensure password fields are not empty (Scored)
-  - 6.2.2 Ensure no legacy "+" entries exist in /etc/passwd (Scored)
-  - 6.2.3 Ensure all users' home directories exist (Scored).
-  - 6.2.4 Ensure no legacy "+" entries exist in /etc/shadow (Scored)
-  - 6.2.5 Ensure no legacy "+" entries exist in /etc/group (Scored)
-  - 6.2.6 Ensure root is the only UID 0 account (Scored)
-  - 6.2.7 Ensure root PATH Integrity (Scored)
-  - 6.2.8 Ensure users' home directories permissions are or more restrictive (Scored)
-  - 6.2.9 Ensure users own their home directories (Scored)
-  - 6.2.10 Ensure users' dot files are not group or world writable (Scored)
-  - 6.2.11 Ensure no users haveforward files (Scored)
-  - 6.2.12 Ensure no users havenetrc files (Scored)
-  - 6.2.13 Ensure users'netrc Files are not group or world accessible (Scored)
-  - 6.2.14 Ensure no users haverhosts files (Scored)
-  - 6.2.15 Ensure all groups in /etc/passwd exist in /etc/group (Scored)
-  - 6.2.16 Ensure no duplicate UIDs exist (Scored)
-  - 6.2.17 Ensure no duplicate GIDs exist (Scored)
-  - 6.2.18 Ensure no duplicate user names exist (Scored)
-  - 6.2.19 Ensure no duplicate group names exist (Scored)
-  - 6.2.20 Ensure shadow group is empty (Scored)
+- 3.1.1 Ensure IPv6 status is identified
+- 3.1.2 Ensure wireless interfaces are disabled
+- 3.1.3 Ensure bluetooth services are not in use
+- 3.2.1 Ensure dccp kernel module is not available
+- 3.2.2 Ensure tipc kernel module is not available
+- 3.2.3 Ensure rds kernel module is not available
+- 3.2.4 Ensure sctp kernel module is not available
+- 3.3.1 Ensure ip forwarding is disabled
+- 3.3.2 Ensure packet redirect sending is disabled
+- 3.3.3 Ensure bogus icmp responses are ignored
+- 3.3.4 Ensure broadcast icmp requests are ignored
+- 3.3.5 Ensure icmp redirects are not accepted
+- 3.3.6 Ensure secure icmp redirects are not accepted
+- 3.3.7 Ensure reverse path filtering is enabled
+- 3.3.8 Ensure source routed packets are not accepted
+- 3.3.9 Ensure suspicious packets are logged
+- 3.3.10 Ensure tcp syn cookies is enabled
+- 3.3.11 Ensure ipv6 router advertisements are not accepted
 
+**4. Host-based firewall**
+
+- 4.1.1 Ensure ufw is installed
+- 4.1.2 Ensure iptables-persistent is not installed with ufw
+- 4.1.3 Ensure ufw service is enabled
+- 4.1.4 Ensure ufw loopback traffic is configured
+- 4.1.6 Ensure ufw firewall rules exist for all open ports
+- 4.1.7 Ensure ufw default deny firewall policy
+- 4.2.1 Ensure nftables is installed
+- 4.2.2 Ensure ufw is uninstalled or disabled with nftables
+- 4.2.4 Ensure a nftables table exists
+- 4.2.5 Ensure nftables base chains exist
+- 4.2.6 Ensure nftables loopback traffic is configured
+- 4.2.8 Ensure nftables default deny firewall policy
+- 4.2.9 Ensure nftables service is enabled
+- 4.2.10 Ensure nftables rules are permanent
+- 4.3.1.1 Ensure iptables packages are installed
+- 4.3.1.2 Ensure nftables is not installed with iptables
+- 4.3.1.3 Ensure ufw is uninstalled or disabled with iptables
+- 4.3.2.1 Ensure iptables default deny firewall policy
+- 4.3.2.2 Ensure iptables loopback traffic is configured
+- 4.3.2.4 Ensure iptables firewall rules exist for all open ports
+- 4.3.3.1 Ensure ip6tables default deny firewall policy
+- 4.3.3.2 Ensure ip6tables loopback traffic is configured
+- 4.3.3.4 Ensure ip6tables firewall rules exist for all open ports
+
+**5. Access control**
+
+- 5.1.1 Ensure permissions on /etc/ssh/sshd_config are configured
+- 5.1.2 Ensure permissions on SSH private host key files are configured
+- 5.1.3 Ensure permissions on SSH public host key files are configured
+- 5.1.4 Ensure sshd access is configured
+- 5.1.5 Ensure sshd Banner is configured
+- 5.1.6 Ensure sshd Ciphers are configured
+- 5.1.7 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured
+- 5.1.8 Ensure sshd DisableForwarding is enabled
+- 5.1.9 Ensure sshd GSSAPIAuthentication is disabled
+- 5.1.10 Ensure sshd HostbasedAuthentication is disabled
+- 5.1.11 Ensure sshd IgnoreRhosts is enabled
+- 5.1.12 Ensure sshd KexAlgorithms is configured
+- 5.1.13 Ensure sshd LoginGraceTime is configured
+- 5.1.14 Ensure sshd LogLevel is configured
+- 5.1.15 Ensure sshd MACs are configured
+- 5.1.16 Ensure sshd MaxAuthTries is configured
+- 5.1.17 Ensure sshd MaxSessions is configured
+- 5.1.18 Ensure sshd MaxStartups is configured
+- 5.1.19 Ensure sshd PermitEmptyPasswords is disabled
+- 5.1.20 Ensure sshd PermitRootLogin is disabled
+- 5.1.21 Ensure sshd PermitUserEnvironment is disabled
+- 5.1.22 Ensure sshd UsePAM is enabled
+- 5.2.1 Ensure sudo is installed
+- 5.2.2 Ensure sudo commands use pty
+- 5.2.3 Ensure sudo log file exists
+- 5.2.4 Ensure users must provide password for privilege escalation
+- 5.2.5 Ensure re-authentication for privilege escalation is not disabled globally
+- 5.2.6 Ensure sudo authentication timeout is configured correctly
+- 5.2.7 Ensure access to the su command is restricted
+- 5.3.1.1 Ensure latest version of pam is installed
+- 5.3.1.2 Ensure libpam-modules is installed
+- 5.3.1.3 Ensure libpam-pwquality is installed
+- 5.3.2.1 Ensure pam_unix module is enabled
+- 5.3.2.2 Ensure pam_faillock module is enabled
+- 5.3.2.3 Ensure pam_pwquality module is enabled
+- 5.3.2.4 Ensure pam_pwhistory module is enabled
+- 5.3.3.1.1 Ensure password failed attempts lockout is configured
+- 5.3.3.1.2 Ensure password unlock time is configured
+- 5.3.3.1.3 Ensure password failed attempts lockout includes root account
+- 5.3.3.2.1 Ensure password number of changed characters is configured
+- 5.3.3.2.3 Ensure password complexity is configured
+- 5.3.3.2.4 Ensure password same consecutive characters is configured
+- 5.3.3.2.5 Ensure password maximum sequential characters is configured
+- 5.3.3.2.6 Ensure password dictionary check is enabled
+- 5.3.3.2.7 Ensure password quality checking is enforced
+- 5.3.3.2.8 Ensure password quality is enforced for the root user
+- 5.3.3.3.1 Ensure password history remember is configured
+- 5.3.3.3.2 Ensure password history is enforced for the root user
+- 5.3.3.3.3 Ensure pam_pwhistory includes use_authtok
+- 5.3.3.4.1 Ensure pam_unix does not include nullok
+- 5.3.3.4.2 Ensure pam_unix does not include remember
+- 5.3.3.4.3 Ensure pam_unix includes a strong password hashing algorithm
+- 5.3.3.4.4 Ensure pam_unix includes use_authtok
+- 5.4.1.4 Ensure strong password hashing algorithm is configured
+- 5.4.1.6 Ensure all users last password change date is in the past
+- 5.4.2.1 Ensure root is the only UID 0 account
+- 5.4.2.2 Ensure root is the only GID 0 account
+- 5.4.2.3 Ensure group root is the only GID 0 group
+- 5.4.2.5 Ensure root path integrity
+- 5.4.2.6 Ensure root user umask is configured
+- 5.4.2.7 Ensure system accounts do not have a valid login shell
+- 5.4.2.8 Ensure accounts without a valid login shell are locked
+- 5.4.3.1 Ensure nologin is not listed in /etc/shells
+- 5.4.3.2 Ensure default user shell timeout is configured
+- 5.4.3.3 Ensure default user umask is configured
+
+**6. Logging and auditing**
+
+- 6.1.1 Ensure AIDE is installed
+- 6.1.2 Ensure filesystem integrity is regularly checked
+- 6.2.1.1.1 Ensure journald service is enabled and active
+- 6.2.1.1.4 Ensure journald ForwardToSyslog is disabled
+- 6.2.1.1.5 Ensure journald Storage is configured
+- 6.2.1.1.6 Ensure journald Compress is configured
+- 6.2.1.2.1 Ensure systemd-journal-remote is installed
+- 6.2.1.2.3 Ensure systemd-journal-upload is enabled and active
+- 6.2.1.2.4 Ensure systemd-journal-remote service is not in use
+- 6.2.2.1 Ensure access to all logfiles has been configured
+- 6.3.1.1 Ensure auditd is installed
+- 6.3.1.2 Ensure auditd service is enabled and active
+- 6.3.1.3 Ensure auditing for processes that start prior to auditd is enabled
+- 6.3.1.4 Ensure audit_backlog_limit is sufficient
+- 6.3.2.1 Ensure audit log storage size is configured
+- 6.3.2.2 Ensure audit logs are not automatically deleted
+- 6.3.2.3 Ensure system is disabled when audit logs are full
+- 6.3.2.4 Ensure system warns when audit logs are low on space
+- 6.3.3.1 Ensure changes to system administration scope (sudoers) is collected
+- 6.3.3.2 Ensure actions as another user are always logged
+- 6.3.3.3 Ensure events that modify the sudo log file are collected
+- 6.3.3.4 Ensure events that modify date and time information are collected
+- 6.3.3.5 Ensure events that modify the system's network environment are collected
+- 6.3.3.6 Ensure use of privileged commands are collected
+- 6.3.3.7 Ensure unsuccessful file access attempts are collected
+- 6.3.3.8 Ensure events that modify user/group information are collected
+- 6.3.3.9 Ensure discretionary access control permission modification events are collected
+- 6.3.3.10 Ensure successful file system mounts are collected
+- 6.3.3.11 Ensure session initiation information is collected
+- 6.3.3.12 Ensure login and logout events are collected
+- 6.3.3.13 Ensure file deletion events by users are collected
+- 6.3.3.14 Ensure events that modify the system's Mandatory Access Controls are collected
+- 6.3.3.15 Ensure successful and unsuccessful attempts to use the chcon command are recorded
+- 6.3.3.16 Ensure successful and unsuccessful attempts to use the setfacl command are recorded
+- 6.3.3.17 Ensure successful and unsuccessful attempts to use the chacl command are recorded
+- 6.3.3.18 Ensure successful and unsuccessful attempts to use the usermod command are recorded
+- 6.3.3.19 Ensure kernel module loading unloading and modification is collected
+- 6.3.3.20 Ensure the audit configuration is immutable
+- 6.3.4.1 Ensure audit log files mode is configured
+- 6.3.4.2 Ensure only authorized users own audit log files
+- 6.3.4.3 Ensure only authorized groups are assigned ownership of audit log files
+- 6.3.4.4 Ensure the audit log directory mode is configured
+- 6.3.4.5 Ensure audit configuration files mode is configured
+- 6.3.4.6 Ensure audit configuration files are owned by root
+- 6.3.4.7 Ensure audit configuration files belong to group root
+- 6.3.4.8 Ensure audit tools mode is configured
+- 6.3.4.9 Ensure audit tools are owned by root
+- 6.3.4.10 Ensure audit tools belong to group root
+
+**7. System maintenance**
+
+- 7.1.1 Ensure permissions on /etc/passwd are configured
+- 7.1.2 Ensure permissions on /etc/passwd- are configured
+- 7.1.3 Ensure permissions on /etc/group are configured
+- 7.1.4 Ensure permissions on /etc/group- are configured
+- 7.1.5 Ensure permissions on /etc/shadow are configured
+- 7.1.6 Ensure permissions on /etc/shadow- are configured
+- 7.1.7 Ensure permissions on /etc/gshadow are configured
+- 7.1.8 Ensure permissions on /etc/gshadow- are configured
+- 7.1.9 Ensure permissions on /etc/shells are configured
+- 7.1.10 Ensure permissions on /etc/security/opasswd are configured
+- 7.1.11 Ensure world writable files and directories are secured
+- 7.1.12 Ensure no files or directories without an owner and a group exist
+- 7.2.1 Ensure accounts in /etc/passwd use shadowed passwords
+- 7.2.2 Ensure /etc/shadow password fields are not empty
+- 7.2.3 Ensure all groups in /etc/passwd exist in /etc/group
+- 7.2.4 Ensure shadow group is empty
+- 7.2.5 Ensure no duplicate UIDs exist
+- 7.2.6 Ensure no duplicate GIDs exist
+- 7.2.7 Ensure no duplicate user names exist
+- 7.2.8 Ensure no duplicate group names exist
+- 7.2.9 Ensure local interactive user home directories are configured
+- 7.2.10 Ensure local interactive user dot files access is configured
 
 _________________
 
