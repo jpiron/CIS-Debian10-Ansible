@@ -18,7 +18,7 @@ deploy-hardening:
     VAULT_ID_TOKEN:
       aud: https://gitlab.com
   variables:
-    ARCHIVE_NAME: hardening-debian-10.tar.gz
+    ARCHIVE_NAME: hardening-debian-12.tar.gz
   script:
     - apt-get update -qy
     - apt-get install -y curl jq --no-install-recommends
