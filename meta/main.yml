@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Denis Bernaci.
-  description: Configure Debian 10 machine to be CIS compliant.
+  description: Configure Debian 12 machine to be CIS compliant.
 #  company: your company (optional)
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -109,7 +109,7 @@ galaxy_info:
   - name: Debian
     versions:
   #  - all
-    - buster 
+    - buster
   #  - stetch
   #  - jessie
   #  - lenny

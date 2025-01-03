@@ -16,7 +16,7 @@
     - level_2_workstation
     - 3.1.1
     - not-scored
-  when: debian10cis_rules_3_1_1
+  when: debian12cis_rules_3_1_1
 # 3.1.2 Ensure wireless interfaces are disabled
 # Wireless networking is used when wired networks are unavailable. Debian contains a
 # wireless tool kit to allow system administrators to configure and use wireless networks
@@ -38,7 +38,7 @@
     - level_2_workstation
     - 3.1.2
     - scored
-  when: debian10cis_rules_3_1_2
+  when: debian12cis_rules_3_1_2
 # 3.2 Network Parameters (Host Only)
 # 3.2.1 Ensure packet redirect sending is disabled
 # ICMP Redirects are used to send routing information to other hosts. As a host itself does
@@ -62,7 +62,7 @@
     - level_1_workstation
     - 3.2.1
     - scored
-  when: debian10cis_rules_3_2_1
+  when: debian12cis_rules_3_2_1
 # 3.2.2 Ensure IP forwarding is disabled
 # Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router.
 - name: 3.2.2 Ensure IP forwarding is disabled
@@ -101,7 +101,7 @@
     - level_1_workstation
     - 3.2.2
     - scored
-  when: debian10cis_rules_3_2_2
+  when: debian12cis_rules_3_2_2
 # 3.3 Network Parameters (Host and Router)
 # 3.3.1 Ensure source routed packets are not accepted
 # Setting net.ipv4.conf.all.accept_source_route,
@@ -152,7 +152,7 @@
     - level_1_workstation
     - 3.3.1
     - scored
-  when: debian10cis_rules_3_3_1
+  when: debian12cis_rules_3_3_1
 # 3.3.2 Ensure ICMP redirects are not accepted
 # Attackers could use bogus ICMP redirect messages to maliciously alter the system routing
 # tables and get them to send packets to incorrect networks and allow your system packets
@@ -193,7 +193,7 @@
     - level_1_workstation
     - 3.3.2
     - scored
-  when: debian10cis_rules_3_3_2
+  when: debian12cis_rules_3_3_2
 # 3.3.3 Ensure secure ICMP redirects are not accepted
 # It is still possible for even known gateways to be compromised. Setting
 # net.ipv4.conf.all.secure_redirects to 0 protects the system from routing table
@@ -225,7 +225,7 @@
     - level_1_workstation
     - 3.3.3
     - scored
-  when: debian10cis_rules_3_3_3
+  when: debian12cis_rules_3_3_3
 # 3.3.4 Ensure suspicious packets are logged
 # Enabling this feature and logging these packets allows an administrator to investigate the
 # possibility that an attacker is sending spoofed packets to their system.
@@ -250,7 +250,7 @@
     - level_1_workstation
     - 3.3.4
     - scored
-  when: debian10cis_rules_3_3_4
+  when: debian12cis_rules_3_3_4
 # 3.3.5 Ensure broadcast ICMP requests are ignored
 # Accepting ICMP echo and timestamp requests with broadcast or multicast destinations for
 # your network could be used to trick your host into starting (or participating) in a Smurf
@@ -276,7 +276,7 @@
     - level_1_workstation
     - 3.3.5
     - scored
-  when: debian10cis_rules_3_3_5
+  when: debian12cis_rules_3_3_5
 # 3.3.6 Ensure bogus ICMP responses are ignored
 # Some routers (and some attackers) will send responses that violate RFC-1122 and attempt
 # to fill up a log file system with many useless error messages.
@@ -286,7 +286,7 @@
     value: "1"
     sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
     state: present
-    reload: 
+    reload:
   tags:
     - section3
     - level_1_server
@@ -294,8 +294,8 @@
     - 3.3.6
     - scored
   when: enable_firewall and
-        firewall_type == "nftables" and 
-        debian10cis_rules_3_3_6
+        firewall_type == "nftables" and
+        debian12cis_rules_3_3_6
 # 3.3.7 Ensure Reverse Path Filtering is enabled
 # Setting these flags is a good way to deter attackers from sending your system bogus
 # packets that cannot be responded to. One instance where this feature breaks down is if
@@ -321,7 +321,7 @@
     - level_1_workstation
     - 3.3.7
     - scored
-  when: debian10cis_rules_3_3_7
+  when: debian12cis_rules_3_3_7
 # 3.3.8 Ensure TCP SYN Cookies is enabled
 # Attackers use SYN flood attacks to perform a denial of service attacked on a system by
 # sending many SYN packets without completing the three way handshake. This will quickly
@@ -343,7 +343,7 @@
     - level_1_workstation
     - 3.3.8
     - scored
-  when: debian10cis_rules_3_3_8
+  when: debian12cis_rules_3_3_8
 # 3.3.9 Ensure IPv6 router advertisements are not accepted
 # It is recommended that systems do not accept router advertisements as they could be
 # tricked into routing traffic to compromised machines. Setting hard routes within the
@@ -367,8 +367,8 @@
     - level_1_workstation
     - 3.3.9
     - scored
-  when: IPv6_is_enabled and 
-        debian10cis_rules_3_3_9
+  when: IPv6_is_enabled and
+        debian12cis_rules_3_3_9
 # 3.4 Uncommon Network Protocols
 # 3.4.1 Ensure DCCP is disabled
 # If the protocol is not required, it is recommended that the drivers not be installed to reduce
@@ -385,7 +385,7 @@
     - level_2_workstation
     - 3.4.1
     - scored
-  when: debian10cis_rules_3_4_1
+  when: debian12cis_rules_3_4_1
 # 3.4.2 Ensure SCTP is disabled
 # The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to
 # support message oriented communication, with several streams of messages in one
@@ -406,7 +406,7 @@
     - level_2_workstation
     - 3.4.2
     - scored
-  when: debian10cis_rules_3_4_2
+  when: debian12cis_rules_3_4_2
 # 3.4.3 Ensure RDS is disabled
 # If the protocol is not being used, it is recommended that kernel module not be loaded,
 # disabling the service to reduce the potential attack surface.
@@ -425,7 +425,7 @@
     - level_2_workstation
     - 3.4.3
     - scored
-  when: debian10cis_rules_3_4_3
+  when: debian12cis_rules_3_4_3
 # 3.4.4 Ensure TIPC is disabled
 # The Transparent Inter-Process Communication (TIPC) protocol is designed to provide
 # communication between cluster nodes.
@@ -441,7 +441,7 @@
     - level_2_workstation
     - 3.4.4
     - scored
-  when: debian10cis_rules_3_4_4
+  when: debian12cis_rules_3_4_4
 # 3.5 Firewall Configuration
 # Only one method should be used to configure a firewall on the system. Use of more
 # than one method could produce unexpected results
@@ -482,9 +482,9 @@
     - level_1_workstation
     - 3.5.1.1
     - scored
-  when: debian10cis_rules_3_5_1_1 and
+  when: debian12cis_rules_3_5_1_1 and
         enable_firewall
-        
+
 # 3.5.2 Configure UncomplicatedFirewall
 # 3.5.2.1 Ensure ufw service is enabled
 # The ufw service must be enabled and running in order for ufw to protect the system
@@ -508,10 +508,10 @@
     - level_1_workstation
     - 3.5.2.1
     - scored
-  when: debian10cis_rules_3_5_2_1 and  
+  when: debian12cis_rules_3_5_2_1 and
         enable_firewall and
         firewall_type == "ufw"
-        
+
 # 3.5.2.2 Ensure default deny firewall policy
 # A default deny policy on connections ensures that any unconfigured network usage will be
 # rejected.
@@ -528,10 +528,10 @@
     - level_1_workstation
     - 3.5.2.2
     - scored
-  when: debian10cis_rules_3_5_2_2 and 
+  when: debian12cis_rules_3_5_2_2 and
         enable_firewall and
-        firewall_type == "ufw" 
-        
+        firewall_type == "ufw"
+
 # 3.5.2.3 Ensure loopback traffic is configured
 # Loopback traffic is generated between processes on machine and is typically critical to
 # operation of the system. The loopback interface is the only place that loopback network
@@ -566,7 +566,7 @@
     - level_1_workstation
     - 3.5.2.3
     - scored
-  when: debian10cis_rules_3_5_2_3 and
+  when: debian12cis_rules_3_5_2_3 and
         enable_firewall and
         firewall_type == "ufw"
 # 3.5.2.4 Ensure outbound connections are configured
@@ -581,7 +581,7 @@
     - level_1_workstation
     - 3.5.2.4
     - not-scored
-  when: debian10cis_rules_3_5_2_4 and 
+  when: debian12cis_rules_3_5_2_4 and
         enable_firewall and
         firewall_type == "ufw"
 # 3.5.2.5 Ensure firewall rules exist for all open ports
@@ -599,7 +599,7 @@
     - level_1_workstation
     - 3.5.2.5
     - scored
-  when: debian10cis_rules_3_5_2_5 and 
+  when: debian12cis_rules_3_5_2_5 and
         enable_firewall and
         firewall_type == "ufw"
 # 3.5.3 Configure nftables
@@ -620,7 +620,7 @@
     - level_1_workstation
     - 3.5.3.1
     - not-scored
-  when: debian10cis_rules_3_5_3_1 and 
+  when: debian12cis_rules_3_5_3_1 and
         enable_firewall and
         firewall_type == "nftables"
 # 3.5.3.2 Ensure a table exists
@@ -638,7 +638,7 @@
     - level_1_workstation
     - 3.5.3.2
     - scored
-  when: debian10cis_rules_3_5_3_2 and 
+  when: debian12cis_rules_3_5_3_2 and
         enable_firewall and
         firewall_type == "nftables"
 # 3.5.3.3 Ensure base chains exist
@@ -659,7 +659,7 @@
     - level_1_workstation
     - 3.5.3.3
     - scored
-  when: debian10cis_rules_3_5_3_3 and 
+  when: debian12cis_rules_3_5_3_3 and
         enable_firewall and
         firewall_type == "nftables"
 # 3.5.3.4 Ensure loopback traffic is configured
@@ -680,7 +680,7 @@
     - level_1_workstation
     - 3.5.3.4
     - scored
-  when: debian10cis_rules_3_5_3_4 and 
+  when: debian12cis_rules_3_5_3_4 and
         enable_firewall and
         firewall_type == "nftables"
 # 3.5.3.5 Ensure outbound and established connections are configured
@@ -705,7 +705,7 @@
     - level_1_workstation
     - 3.5.3.5
     - not-scored
-  when: debian10cis_rules_3_5_3_5 and 
+  when: debian12cis_rules_3_5_3_5 and
         enable_firewall and
         firewall_type == "nftables"
 #  3.5.3.6 Ensure default deny firewall policy
@@ -732,7 +732,7 @@
     - level_1_workstation
     - 3.5.3.6
     - scored
-  when: debian10cis_rules_3_5_3_6 and 
+  when: debian12cis_rules_3_5_3_6 and
         enable_firewall and
         firewall_type == "nftables"
 # 3.5.3.7 Ensure nftables service is enabled
@@ -749,7 +749,7 @@
     - level_1_workstation
     - 3.5.3.7
     - scored
-  when: debian10cis_rules_3_5_3_7 and 
+  when: debian12cis_rules_3_5_3_7 and
         enable_firewall and
         firewall_type == "nftables"
 # 3.5.3.8 Ensure nftables rules are permanent
@@ -767,7 +767,7 @@
     - level_1_workstation
     - 3.5.3.8
     - scored
-  when: debian10cis_rules_3_5_3_8 and 
+  when: debian12cis_rules_3_5_3_8 and
         enable_firewall and
         firewall_type == "nftables"
 # 3.5.4 Configure iptables
@@ -789,7 +789,7 @@
     - level_1_workstation
     - 3.5.4.1.1
     - scored
-  when: debian10cis_rules_3_5_4_1_1 and 
+  when: debian12cis_rules_3_5_4_1_1 and
         enable_firewall and
         firewall_type == "iptables"
 # 3.5.4.1.2 Ensure loopback traffic is configured
@@ -820,7 +820,7 @@
     - level_1_workstation
     - 3.5.4.1.2
     - scored
-  when: debian10cis_rules_3_5_4_1_2 and 
+  when: debian12cis_rules_3_5_4_1_2 and
         enable_firewall and
         firewall_type == "iptables"
 # 3.5.4.1.3 Ensure outbound and established connections are configured
@@ -876,7 +876,7 @@
     - level_1_workstation
     - 3.5.4.1.3
     - not-scored
-  when: debian10cis_rules_3_5_4_1_3 and 
+  when: debian12cis_rules_3_5_4_1_3 and
         enable_firewall and
         firewall_type == "iptables"
 # 3.5.4.1.4 Ensure firewall rules exist for all open ports
@@ -897,7 +897,7 @@
     - level_1_workstation
     - 3.5.4.1.4
     - scored
-  when: debian10cis_rules_3_5_4_1_4 and 
+  when: debian12cis_rules_3_5_4_1_4 and
         enable_firewall and
         firewall_type == "iptables"
 # 3.5.4.2 Configure IPv6 ip6tables
@@ -919,7 +919,7 @@
     - level_1_workstation
     - 3.5.4.2.1
     - scored
-  when: debian10cis_rules_3_5_4_2_1 and
+  when: debian12cis_rules_3_5_4_2_1 and
         enable_firewall and
         firewall_type == "iptables" and
         IPv6_is_enabled
@@ -954,7 +954,7 @@
     - level_1_workstation
     - 3.5.4.2.2
     - scored
-  when: debian10cis_rules_3_5_4_2_2 and
+  when: debian12cis_rules_3_5_4_2_2 and
         enable_firewall and
         firewall_type == "iptables" and
         IPv6_is_enabled
@@ -1017,7 +1017,7 @@
     - level_1_workstation
     - 3.5.4.2.3
     - not-scored
-  when: debian10cis_rules_3_5_4_2_3 and
+  when: debian12cis_rules_3_5_4_2_3 and
         enable_firewall and
         firewall_type == "iptables" and
         IPv6_is_enabled
@@ -1040,7 +1040,7 @@
     - level_1_workstation
     - 3.5.4.2.4
     - not-scored
-  when: debian10cis_rules_3_5_4_2_4 and
+  when: debian12cis_rules_3_5_4_2_4 and
         enable_firewall and
         firewall_type == "iptables" and
         IPv6_is_enabled
