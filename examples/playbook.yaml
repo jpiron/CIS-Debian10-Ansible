@@ -4,4 +4,4 @@
   remote_user: root
   gather_facts: no
   roles:
-    - { role: "CIS-Debian10-Ansible" }
+    - { role: "CIS-debian12-Ansible" }
