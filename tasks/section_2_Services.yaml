@@ -9,6 +9,8 @@
   apt:
     name: xinetd
     state: absent
+    purge: true
+    autoremove: true
   tags:
     - section2
     - level_1_server
@@ -23,6 +25,8 @@
   apt:
     name: openbsd-inetd
     state: absent
+    purge: true
+    autoremove: true
   tags:
     - section2
     - level_1_server
@@ -132,6 +136,8 @@
   apt:
     name: ["xserver-xorg*"]
     state: absent
+    purge: true
+    autoremove: true
   tags:
     - section2
     - level_1_server
@@ -437,6 +443,8 @@
   apt:
     name: nis
     state: absent
+    purge: true
+    autoremove: true
   tags:
     - section2
     - level_1_server
@@ -450,6 +458,8 @@
   apt:
     name: rsh-client
     state: absent
+    purge: true
+    autoremove: true
   tags:
     - section2
     - level_1_server
@@ -465,6 +475,8 @@
   apt:
     name: talk
     state: absent
+    purge: true
+    autoremove: true
   tags:
     - section2
     - level_1_server
@@ -483,6 +495,8 @@
   apt:
     name: telnet
     state: absent
+    purge: true
+    autoremove: true
   tags:
     - section2
     - level_1_server
@@ -499,6 +513,8 @@
   apt:
     name: ldap-utils
     state: absent
+    purge: true
+    autoremove: true
   tags:
     - section2
     - level_1_server
