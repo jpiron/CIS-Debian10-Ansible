@@ -589,6 +589,41 @@
     - 2.2.4
     - scored
   when: debian12cis_rules_2_2_4
+# 2.2.5 Ensure LDAP client is not installed
+# The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for
+# NIS/YP. It is a service that provides a method for looking up information from a central database.
+# Removing the LDAP client will prevent or inhibit using LDAP for authentication in your
+# environment.
+# If the system will not need to act as an LDAP client, it is recommended that the software be removed to reduce the potential attack surface.
+- name: 2.2.5 Ensure LDAP client is not installed
+  apt:
+    name: ldap-utils
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.5
+    - scored
+  when: debian12cis_rules_2_2_5
+# 2.2.6 Ensure ftp client is not installed
+# FTP (File Transfer Protocol) is a traditional and widely used standard tool for transferring files between a server and clients over a network, especially where no authentication is necessary (permits anonymous users to connect to a server).
+# FTP does not protect the confidentiality of data or authentication credentials. It is recommended SFTP be used if file transfer is required. Unless there is a need to run the system as a FTP server (for example, to allow anonymous downloads), it is recommended that the package be removed to reduce the potential attack surface.
+- name: 2.2.6 Ensure ftp client is not installed
+  apt:
+    name: ftp
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.6
+    - scored
+  when: debian12cis_rules_2_2_6
 # 2.2.1.1 Ensure time synchronization is in use
 # System time should be synchronized between all systems in an environment. This is
 # typically done by establishing an authoritative time server or set of servers and having all
@@ -722,73 +757,4 @@
     - 2.2.15
     - scored
   when: debian12cis_rules_2_2_15
-# 2.3.2 Ensure rsh client is not installed
-# The rsh-client package contains the client commands for the rsh services.
-- name: 2.3.2 Ensure rsh client is not installed
-  apt:
-    name: rsh-client
-    state: absent
-    purge: true
-    autoremove: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.3.2
-    - scored
-  when: debian12cis_rules_2_3_2
-# 2.3.3 Ensure talk client is not installed
-# The talk software makes it possible for users to send and receive messages across systems
-# through a terminal session. The talk client, which allows initialization of talk sessions, is
-# installed by default.
-- name: 2.3.3 Ensure talk client is not installed
-  apt:
-    name: talk
-    state: absent
-    purge: true
-    autoremove: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.3.3
-    - scored
-  when: debian12cis_rules_2_3_3
-# 2.3.4 Ensure telnet client is not installed
-# The telnet package contains the telnet client, which allows users to start connections to
-# other systems via the telnet protocol.
-# Many insecure service clients are used as troubleshooting tools and in testing
-# environments. Uninstalling them can inhibit capability to test and troubleshoot. If they are
-# required it is advisable to remove the clients after use to prevent accidental or intentional
-# misuse.
-- name: 2.3.4 Ensure telnet client is not installed
-  apt:
-    name: telnet
-    state: absent
-    purge: true
-    autoremove: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.3.4
-    - scored
-  when: debian12cis_rules_2_3_4
-# 2.3.5 Ensure LDAP client is not installed
-# The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for
-# NIS/YP. It is a service that provides a method for looking up information from a central database.
-# Removing the LDAP client will prevent or inhibit using LDAP for authentication in your
-# environment.
-- name: 2.3.5 Ensure LDAP client is not installed
-  apt:
-    name: ldap-utils
-    state: absent
-    purge: true
-    autoremove: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.3.5
-    - scored
-  when: debian12cis_rules_2_3_5
+
