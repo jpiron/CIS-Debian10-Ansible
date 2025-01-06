@@ -624,33 +624,7 @@
     - 2.2.6
     - scored
   when: debian12cis_rules_2_2_6
-# 2.2.1.1 Ensure time synchronization is in use
-# System time should be synchronized between all systems in an environment. This is
-# typically done by establishing an authoritative time server or set of servers and having all
-# systems synchronize their clocks to them.
-# If access to a physical host's clock is available and configured according to site policy,
-# this section can be skipped
-# Only one time synchronization method should be in use on the system
-# If access to a physical host's clock is available and configured according to site policy,
-# systemd-timesyncd should be stopped and masked
-- name: 2.2.1.1 Ensure time synchronization is in use
-  block:
-    - name: 2.2.1.1 Ensure time synchronization is in use - service install
-      apt:
-        name: ["chrony"]
-        state: present
-    - name: 2.2.1.1 Ensure time synchronization is in use - service start
-      service:
-        name: "chrony"
-        state: started
-        enabled: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.1.1
-    - scored
-  when: debian12cis_rules_2_2_1_1
+
 # 2.2.1.2 Ensure systemd-timesyncd is configured
 # The systemd-timesyncd service specifically implements only SNTP. This minimalistic
 # service will set the system clock for large offsets or slowly adjust it for smaller deltas.
@@ -757,4 +731,19 @@
     - 2.2.15
     - scored
   when: debian12cis_rules_2_2_15
-
+# 2.3.1.1 Ensure a single time synchronization daemon is in use
+# System time should be synchronized between all systems in an environment. This is typically done by establishing an authoritative time server or set of servers and having all systems synchronize their clocks to them.
+# Time synchronization is important to support time sensitive security mechanisms and ensures log files have consistent time records across the enterprise, which aids in forensic investigations.
+- name: 2.3.1.1 Ensure a single time synchronization daemon is in use
+  apt:
+    name: chrony
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.3.1.1
+    - scored
+  when: debian12cis_rules_2_3_1_1
