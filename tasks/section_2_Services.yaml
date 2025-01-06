@@ -1,5 +1,29 @@
 ---
 # 2 Services
+# 2.1.19 Ensure autofs services are not in use
+# autofs allows automatic mounting of devices, typically including CD/DVDs and USB drives.
+# With automounting enabled anyone with physical access could attach a USB drive or disc and have its contents available in the filesystem even if they lacked permissions to mount it themselves.
+- name: 2.1.11 Ensure autofs services are not in use
+  block:
+    - name: 2.1.1 Ensure autofs services are not in use - sysctl
+      service:
+        name: autofs
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.1 Ensure autofs services are not in use - apt
+      apt:
+        name: autofs
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.1
+    - scored
+  when: debian12cis_rules_2_1_1
 # 2.1.2 Ensure openbsd-inetd is not installed
 # The inetd daemon listens for well known services and dispatches the appropriate daemon
 # to properly respond to service requests.
