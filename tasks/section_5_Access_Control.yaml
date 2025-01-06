@@ -1,20 +1,5 @@
 ---
-# 5 Access, Authentication and Authorization
-# 5.1 Configure cron
-# 5.1.1 Ensure cron daemon is enabled
-# The cron daemon is used to execute batch jobs on the system.
-- name: 5.1.1 Ensure cron daemon is enabled
-  service:
-    name: cron
-    enabled: yes
-    state: started
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.1.1
-    - scored
-  when: debian12cis_rules_5_1_1
+# 5 Access control
 # 5.1.2 Ensure permissions on /etc/crontab are configured
 # This file contains information on what system jobs are run by cron. Write access to these
 # files could provide unprivileged users with the ability to elevate their privileges. Read
