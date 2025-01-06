@@ -135,6 +135,30 @@
     - 2.1.5
     - scored
   when: debian12cis_rules_2_1_5
+# 2.1.6 Ensure ftp server services are not in use
+# The File Transfer Protocol (FTP) provides networked computers with the ability to transfer files.
+# FTP does not protect the confidentiality of data or authentication credentials. It is recommended SFTP be used if file transfer is required. Unless there is a need to run the system as a FTP server (for example, to allow anonymous downloads), it is recommended that the package be deleted to reduce the potential attack surface.
+- name: 2.1.6 Ensure ftp server services are not in use
+  block:
+    - name: 2.1.6 Ensure ftp server services are not in use - sysctl
+      service:
+        name: vsftpd.service
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.6 Ensure ftp server services are not in use - apt
+      apt:
+        name: vsftpd
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.6
+    - scored
+  when: debian12cis_rules_2_1_6
 # 2.1.2 Ensure openbsd-inetd is not installed
 # The inetd daemon listens for well known services and dispatches the appropriate daemon
 # to properly respond to service requests.
@@ -571,23 +595,6 @@
     - 2.2.7
     - scored
   when: debian12cis_rules_2_2_7
-# 2.2.9 Ensure FTP Server is not enabled
-# The File Transfer Protocol (FTP) provides networked computers with the ability to transfer
-# files.
-# Note: Additional FTP servers also exist and should be audited.
-- name: 2.2.9 Ensure FTP Server is not enabled
-  service:
-    name: vsftpd
-    state: stopped
-    enabled : no
-  ignore_errors: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.9
-    - scored
-  when: debian12cis_rules_2_2_9
 # 2.2.10 Ensure HTTP server is not enabled
 # HTTP or web servers provide the ability to host web site content.
 # Note: Several httpd servers exist and can use other service names. apache2 and nginx are
