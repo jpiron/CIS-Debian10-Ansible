@@ -23,3 +23,7 @@
   service:
     name: rsyslog
     state: restarted
+- name: postfix restart
+  service:
+    name: postfix
+    state: restarted

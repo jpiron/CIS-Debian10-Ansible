@@ -525,6 +525,23 @@
     - 2.1.20
     - scored
   when: debian12cis_rules_2_1_20
+# 2.1.21 Ensure mail transfer agent is configured for local-only mode
+# Mail Transfer Agents (MTA), such as sendmail and Postfix, are used to listen for incoming mail and transfer the messages to the appropriate user or mail server. If the system is not intended to be a mail server, it is recommended that the MTA be configured to only process local mail.
+# The software for all Mail Transfer Agents is complex and most have a long history of security issues. While it is important to ensure that the system can process local mail messages, it is not necessary to have the MTA's daemon listening on a port unless the server is intended to be a mail server that receives and processes mail from other systems.
+- name: 2.1.21 Ensure mail transfer agent is configured for local-only mode
+  blockinfile:
+    path: /etc/postfix/main.cf
+    insertafter: ".*RECEIVING MAIL.*"
+    block: |
+      inet_interfaces = loopback-only
+  notify:
+    - postfix restart
+  tags:
+    - section2
+    - level_1_server
+    - 2.1.21
+    - scored
+  when: debian12cis_rules_2_1_21
 # 2.2.1 Ensure NIS client is not installed
 # The Network Information Service (NIS), formerly known as Yellow Pages, is a client-server directory service protocol used to distribute system configuration files. The NIS client was used to bind a machine to an NIS server and receive the distributed configuration files.
 # The NIS service is inherently an insecure system that has been vulnerable to DOS attacks, buffer overflows and has poor authentication for querying NIS maps. NIS generally has been replaced by such protocols as Lightweight Directory Access Protocol (LDAP). It is recommended that the service be removed.
