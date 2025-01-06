@@ -216,7 +216,7 @@
   block:
     - name: 2.1.13 Ensure rsync services are not in use - sysctl
       service:
-        name: rsync
+        name: rsync.service
         state: stopped
         enabled : no
       ignore_errors: true
@@ -242,7 +242,7 @@
   block:
     - name: 2.1.14 Ensure Samba is not enabled - sysctl
       service:
-        name: smbd
+        name: smbd.service
         state: stopped
         enabled : no
       ignore_errors: true
@@ -273,7 +273,7 @@
   block:
     - name: 2.1.15 Ensure SNMP Server is not enabled - sysctl
       service:
-        name: snmpd
+        name: snmpd.service
         state: stopped
         enabled : no
       ignore_errors: true
@@ -298,7 +298,7 @@
   block:
     - name: 2.1.16 Ensure tftp server services are not in use - sysctl
       service:
-        name: tftpd-hpa
+        name: tftpd-hpa.service
         state: stopped
         enabled : no
       ignore_errors: true
@@ -322,7 +322,7 @@
   block:
     - name: 2.1.17 Ensure web proxy server services are not in use - sysctl
       service:
-        name: squid
+        name: squid.service
         state: stopped
         enabled : no
       ignore_errors: true
@@ -342,12 +342,12 @@
 # 2.1.18 Ensure web server services are not in use
 # Web servers provide the ability to host web site content.
 # Unless there is a local site approved requirement to run a web server service on the system, web server packages should be removed to reduce the potential attack surface.
-- name: 2.1.18 Ensure web proxy server services are not in use
+- name: 2.1.18 Ensure web server services are not in use
   vars:
     web_server_services:
-      - apache2
-      - httpd
-      - nginx
+      - apache2.socket
+      - httpd.service
+      - nginx.service
     web_server_libraries:
       - apache2
       - nginx
@@ -380,7 +380,7 @@
   block:
     - name: 2.1.19 Ensure xinetd services are not in use - sysctl
       service:
-        name: xinetd
+        name: xinetd.service
         state: stopped
         enabled : no
       ignore_errors: true
