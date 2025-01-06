@@ -27,3 +27,7 @@
   service:
     name: postfix
     state: restarted
+- name: systemd-timesyncd restart
+  service:
+    name: systemd-timesyncd
+    state: restarted

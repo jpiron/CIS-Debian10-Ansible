@@ -1233,6 +1233,107 @@
     - manual_setup
     - scored
   when: debian12cis_rules_1_7_2
+# 1.7.3 Ensure GDM disable-user-list option is enabled
+# GDM is the GNOME Display Manager which handles graphical login for GNOME based systems.
+# The disable-user-list option controls if a list of users is displayed on the login screen.
+# Displaying the user list eliminates half of the Userid/Password equation that an unauthorized person would need to log on.
+- name: 1.7.3 Ensure GDM disable-user-list option is enabled
+  debug:
+    msg: To be implemented
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.3
+    - manual_setup
+    - scored
+  when: debian12cis_rules_1_7_3
+# 1.7.4 Ensure GDM screen locks when the user is idle
+# GNOME Desktop Manager can make the screen lock automatically whenever the user is idle for some amount of time.
+# Setting a lock-out value reduces the window of opportunity for unauthorized user access to another user's session that has been left unattended.
+- name: 1.7.4 Ensure GDM screen locks when the user is idle
+  debug:
+    msg: To be implemented
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.4
+    - manual_setup
+    - scored
+  when: debian12cis_rules_1_7_4
+# 1.7.5 Ensure GDM screen locks cannot be overridden
+# GNOME Desktop Manager can lock down specific settings by using the lockdown mode in dconf to prevent users from changing specific settings.
+# To lock down a dconf key or subpath, create a locks subdirectory in the keyfile directory. The files inside this directory contain a list of keys or subpaths to lock. Just as with the keyfiles, you may add any number of files to this directory.
+# Setting a lock-out value reduces the window of opportunity for unauthorized user access to another user's session that has been left unattended.
+# Without locking down the system settings, user settings take precedence over the system settings.
+- name: 1.7.5 Ensure GDM screen locks cannot be overridden
+  debug:
+    msg: To be implemented
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.5
+    - manual_setup
+    - scored
+  when: debian12cis_rules_1_7_5
+# 1.7.6 Ensure GDM automatic mounting of removable media is disabled
+# By default GNOME automatically mounts removable media when inserted as a convenience to the user.
+# With automounting enabled anyone with physical access could attach a USB drive or disc and have its contents available in system even if they lacked permissions to mount it themselves.
+- name: 1.7.6 Ensure GDM automatic mounting of removable media is disabled
+  debug:
+    msg: To be implemented
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.6
+    - manual_setup
+    - scored
+  when: debian12cis_rules_1_7_6
+# 1.7.7 Ensure GDM disabling automatic mounting of removable media is not overridden
+# By default GNOME automatically mounts removable media when inserted as a convenience to the user.
+# With automounting enabled anyone with physical access could attach a USB drive or disc and have its contents available in system even if they lacked permissions to mount it themselves.
+- name: 1.7.7 Ensure GDM disabling automatic mounting of removable media is not overridden
+  debug:
+    msg: To be implemented
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.7
+    - manual_setup
+    - scored
+  when: debian12cis_rules_1_7_7
+# 1.7.8 Ensure GDM autorun-never is enabled
+# The autorun-never setting allows the GNOME Desktop Display Manager to disable autorun through GDM.
+# Malware on removable media may taking advantage of Autorun features when the media is inserted into a system and execute.
+- name: 1.7.8 Ensure GDM autorun-never is enabled
+  debug:
+    msg: To be implemented
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.8
+    - manual_setup
+    - scored
+  when: debian12cis_rules_1_7_8
+# 1.7.9 Ensure GDM autorun-never is not overridden
+# The autorun-never setting allows the GNOME Desktop Display Manager to disable autorun through GDM.
+# Malware on removable media may taking advantage of Autorun features when the media is inserted into a system and execute.
+- name: 1.7.9 Ensure GDM autorun-never is not overridden
+  debug:
+    msg: To be implemented
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.9
+    - manual_setup
+    - scored
+  when: debian12cis_rules_1_7_9
 # 1.7.10 Ensure XDCMP is not enabled
 # X Display Manager Control Protocol (XDMCP) is designed to provide authenticated access to display management services for remote displays.
 # XDMCP is inherently insecure.

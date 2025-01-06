@@ -114,6 +114,13 @@ debian12cis_rules_1_6_5: true
 debian12cis_rules_1_6_6: true
 debian12cis_rules_1_7_1: true
 debian12cis_rules_1_7_2: true
+debian12cis_rules_1_7_3: true
+debian12cis_rules_1_7_4: true
+debian12cis_rules_1_7_5: true
+debian12cis_rules_1_7_6: true
+debian12cis_rules_1_7_7: true
+debian12cis_rules_1_7_8: true
+debian12cis_rules_1_7_9: true
 debian12cis_rules_1_7_10: true
 
 # Chapter 2
