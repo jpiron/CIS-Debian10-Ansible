@@ -777,3 +777,185 @@
     name: cron
     state: started
     enabled: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.1.1
+    - scored
+  when: debian12cis_rules_2_4_1_1
+# 2.4.1.2 Ensure permissions on /etc/crontab are configured
+# The /etc/crontab file is used by cron to control its own jobs. The commands in this item make sure that root is the user and group owner of the file and that only the owner can access the file.
+# This file contains information on what system jobs are run by cron. Write access to these
+# files could provide unprivileged users with the ability to elevate their privileges. Read
+# access to these files could provide users with the ability to gain insight on system jobs that
+# run on the system and could provide them a way to gain unauthorized privileged access.
+- name: 2.4.1.2 Ensure permissions on /etc/crontab are configured
+  file:
+    dest: /etc/crontab
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.1.2
+    - scored
+  when: debian12cis_rules_2_4_1_2
+# 2.4.1.3 Ensure permissions on /etc/cron.hourly are configured
+# This directory contains system cron jobs that need to run on an hourly basis.
+# The files in this directory cannot be manipulated by the crontab command, but are instead edited by system administrators using a text editor.
+# The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.
+# Granting write access to this directory for non-privileged users could provide them the
+# means for gaining unauthorized elevated privileges. Granting read access to this directory
+# could give an unprivileged user insight in how to gain elevated privileges or circumvent
+# auditing controls.
+- name: 2.4.1.3 Ensure permissions on /etc/cron.hourly are configured
+  file:
+    dest: /etc/cron.hourly
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.1.3
+    - scored
+  when: debian12cis_rules_2_4_1_3
+# 2.4.1.4 Ensure permissions on /etc/cron.daily are configured
+# The /etc/cron.daily directory contains system cron jobs that need to run on a daily basis.
+# The files in this directory cannot be manipulated by the crontab command, but are instead edited by system administrators using a text editor.
+# The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.
+# Granting write access to this directory for non-privileged users could provide them the
+# means for gaining unauthorized elevated privileges. Granting read access to this directory
+# could give an unprivileged user insight in how to gain elevated privileges or circumvent
+# auditing controls.
+- name: 2.4.1.4 Ensure permissions on /etc/cron.daily are configured
+  file:
+    dest: /etc/cron.daily
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.1.4
+    - scored
+  when: debian12cis_rules_2_4_1_4
+# 2.4.1.5 Ensure permissions on /etc/cron.weekly are configured
+# The /etc/cron.weekly directory contains system cron jobs that need to run on a weekly basis.
+# The files in this directory cannot be manipulated by the crontab command, but are instead edited by system administrators using a text editor.
+# The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.
+# Granting write access to this directory for non-privileged users could provide them the
+# means for gaining unauthorized elevated privileges. Granting read access to this directory
+# could give an unprivileged user insight in how to gain elevated privileges or circumvent
+# auditing controls.
+- name: 2.4.1.5 Ensure permissions on /etc/cron.weekly are configured
+  file:
+    dest: /etc/cron.weekly
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.1.5
+    - scored
+  when: debian12cis_rules_2_4_1_5
+# 2.4.1.6 Ensure permissions on /etc/cron.monthly are configured
+# The /etc/cron.monthly directory contains system cron jobs that need to run on a monthly basis.
+# The files in this directory cannot be manipulated by the crontab command, but are instead edited by system administrators using a text editor.
+# The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.
+# Granting write access to this directory for non-privileged users could provide them the
+# means for gaining unauthorized elevated privileges. Granting read access to this directory
+# could give an unprivileged user insight in how to gain elevated privileges or circumvent
+# auditing controls.
+- name: 2.4.1.6 Ensure permissions on /etc/cron.monthly are configured
+  file:
+    dest: /etc/cron.monthly
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.1.6
+    - scored
+  when: debian12cis_rules_2_4_1_6
+# 2.4.1.7 Ensure permissions on /etc/cron.d are configured
+# The /etc/cron.d directory contains system cron jobs that need to run in a similar manner to the hourly, daily weekly and monthly jobs from /etc/crontab , but require more granular control as to when they run.
+# The files in this directory cannot be manipulated by the crontab command, but are instead edited by system administrators using a text editor.
+# The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.
+# Granting write access to this directory for non-privileged users could provide them the means for gaining unauthorized elevated privileges.
+# Granting read access to this directory could give an unprivileged user insight in how to gain elevated privileges or circumvent auditing controls.
+- name: 2.4.1.7 Ensure permissions on /etc/cron.d are configured
+  file:
+    dest: /etc/cron.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.1.7
+    - scored
+  when: debian12cis_rules_2_4_1_7
+# 2.4.1.8 Ensure crontab is restricted to authorized users
+# On many systems, only the system administrator is authorized to schedule cron jobs.
+# Using the cron.allow file to control who can run cron jobs enforces this policy.
+# It is easier to manage an allow list than a deny list.
+# In a deny list, you could potentially add a user ID to the system and forget to add it to the deny files.
+- name: 2.4.1.8 Ensure crontab is restricted to authorized users
+  block:
+    - stat:
+        path: /etc/cron.allow
+      register: output_2_4_1_8_callow
+    - name: 2.4.1.8 Ensure crontab is restricted to authorized users
+      file:
+        path: /etc/cron.allow
+        state: "{{ 'file' if output_2_4_1_8_callow.stat.exists else 'touch' }}"
+        owner: root
+        group: root
+        mode: "g-wx,o-rwx"
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.1.8
+    - scored
+  when: debian12cis_rules_2_4_1_8
+# 2.4.2.1 Ensure at is restricted to authorized users
+# On many systems, only the system administrator is authorized to schedule at jobs.
+# Using the at.allow file to control who can run at jobs enforces this policy.
+# It is easier to manage an allow list than a deny list.
+# In a deny list, you could potentially add a user ID to the system and forget to add it to the deny files.
+- name: 2.4.2.1 Ensure at is restricted to authorized users
+  block:
+    - stat:
+        path: /etc/at.allow
+      register: output_2_4_2_1_atallow
+    - name: 2.4.2.1 Ensure at is restricted to authorized users
+      file:
+        path: /etc/at.allow
+        state: "{{ 'file' if output_2_4_2_1_atallow.stat.exists else 'touch' }}"
+        owner: root
+        group: root
+        mode: "g-wx,o-rwx"
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.4.2.1
+    - scored
+  when: debian12cis_rules_2_4_2_1
