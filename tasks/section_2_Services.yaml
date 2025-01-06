@@ -37,14 +37,14 @@
       - avahi-daemon.socket
       - avahi-daemon.service
   block:
-    - name: 2.1.2 Ensure avahi services are not in use - sysctl
+    - name: 2.1.2 Ensure avahi daemon services are not in use - sysctl
       service:
         name: "{{ item }}"
         state: stopped
         enabled : no
       ignore_errors: true
       loop: avahi_daemon_services
-    - name: 2.1.2 Ensure avahi services are not in use - apt
+    - name: 2.1.2 Ensure avahi daemon services are not in use - apt
       apt:
         name: avahi-daemon
         state: absent
@@ -57,6 +57,35 @@
     - 2.1.2
     - scored
   when: debian12cis_rules_2_1_2
+# 2.1.3 Ensure dhcp server services are not in use
+# The Dynamic Host Configuration Protocol (DHCP) is a service that allows machines to be dynamically assigned IP addresses. There are two versions of the DHCP protocol DHCPv4 and DHCPv6. At startup the server may be started for one or the other via the -4 or -6 arguments.
+# Unless a system is specifically set up to act as a DHCP server, it is recommended that this package be removed to reduce the potential attack surface.
+- name: 2.1.3 Ensure dhcp server services are not in use
+  vars:
+    dhcp_server_services:
+      - isc-dhcp-server.service
+      - isc-dhcp-server6.service
+  block:
+    - name: 2.1.3 Ensure dhcp server services are not in use - sysctl
+      service:
+        name: "{{ item }}"
+        state: stopped
+        enabled : no
+      ignore_errors: true
+      loop: dhcp_server_services
+    - name: 2.1.3 Ensure dhcp server services are not in use - apt
+      apt:
+        name: isc-dhcp-server
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.3
+    - scored
+  when: debian12cis_rules_2_1_3
 # 2.1.2 Ensure openbsd-inetd is not installed
 # The inetd daemon listens for well known services and dispatches the appropriate daemon
 # to properly respond to service requests.
@@ -451,22 +480,6 @@
     - 2.2.1.4
     - scored
   when: debian12cis_rules_2_2_1_4
-# 2.2.5 Ensure DHCP Server is not enabled
-# The Dynamic Host Configuration Protocol (DHCP) is a service that allows machines to be
-# dynamically assigned IP addresses.
-- name: 2.2.5 Ensure DHCP Server is not enabled
-  service:
-    name: isc-dhcp-server
-    state: stopped
-    enabled : no
-  ignore_errors: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.5
-    - scored
-  when: debian12cis_rules_2_2_5
 # 2.2.6 Ensure LDAP server is not enabled
 # The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for
 # NIS/YP. It is a service that provides a method for looking up information from a central
