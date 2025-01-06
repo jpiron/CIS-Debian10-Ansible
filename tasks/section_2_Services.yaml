@@ -111,6 +111,30 @@
     - 2.1.4
     - scored
   when: debian12cis_rules_2_1_4
+# 2.1.5 Ensure dnsmasq services are not in use
+# dnsmasq is a lightweight tool that provides DNS caching, DNS forwarding and DHCP (Dynamic Host Configuration Protocol) services.
+# Unless a system is specifically designated to act as a DNS caching, DNS forwarding and/or DHCP server, it is recommended that the package be removed to reduce the potential attack surface.
+- name: 2.1.5 Ensure dnsmasq services are not in use
+  block:
+    - name: 2.1.5 Ensure dnsmasq services are not in use - sysctl
+      service:
+        name: dnsmasq.service
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.5 Ensure dnsmasq services are not in use - apt
+      apt:
+        name: dnsmasq
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.5
+    - scored
+  when: debian12cis_rules_2_1_5
 # 2.1.2 Ensure openbsd-inetd is not installed
 # The inetd daemon listens for well known services and dispatches the appropriate daemon
 # to properly respond to service requests.
