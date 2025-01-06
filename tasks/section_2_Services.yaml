@@ -541,6 +541,22 @@
     - 2.2.1
     - scored
   when: debian12cis_rules_2_2_1
+# 2.2.2 Ensure rsh Client is not installed
+# The rsh-client package contains the client commands for the rsh services.
+# These legacy clients contain numerous security exposures and have been replaced with the more secure SSH package. Even if the server is removed, it is best to ensure the clients are also removed to prevent users from inadvertently attempting to use these commands and therefore exposing their credentials. Note that removing the rsh-client package removes the clients for rsh , rcp and rlogin .
+- name: 2.2.2 Ensure rsh Client is not installed
+  apt:
+    name: rsh-client
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.2
+    - scored
+  when: debian12cis_rules_2_2_2
 # 2.2.1.1 Ensure time synchronization is in use
 # System time should be synchronized between all systems in an environment. This is
 # typically done by establishing an authoritative time server or set of servers and having all
