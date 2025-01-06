@@ -1,9 +1,9 @@
 ---
 # 2 Services
-# 2.1.19 Ensure autofs services are not in use
+# 2.1.1 Ensure autofs services are not in use
 # autofs allows automatic mounting of devices, typically including CD/DVDs and USB drives.
 # With automounting enabled anyone with physical access could attach a USB drive or disc and have its contents available in the filesystem even if they lacked permissions to mount it themselves.
-- name: 2.1.11 Ensure autofs services are not in use
+- name: 2.1.1 Ensure autofs services are not in use
   block:
     - name: 2.1.1 Ensure autofs services are not in use - sysctl
       service:
@@ -310,6 +310,21 @@
     - 2.1.19
     - scored
   when: debian12cis_rules_2_1_19
+# 2.1.20 Ensure X window server services are not in use
+# The X Window System provides a Graphical User Interface (GUI) where users can have multiple windows in which to run programs and various add on. The X Windows system is typically used on workstations where users login, but not on servers where users typically do not login.
+# Unless your organization specifically requires graphical login access via X Windows, remove it to reduce the potential attack surface.
+- name: 2.1.20 Ensure X window server services are not in use
+  apt:
+    name: xserver-common
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - 2.1.20
+    - scored
+  when: debian12cis_rules_2_1_20
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
@@ -403,23 +418,6 @@
     - 2.2.1.4
     - scored
   when: debian12cis_rules_2_2_1_4
-# 2.2.2 Ensure X Window System is not installed
-# Many Linux systems run applications which require a Java runtime. Some Linux Java
-# packages have a dependency on specific X Windows xorg-x11-fonts. One workaround to
-# avoid this dependency is to use the "headless" Java packages for your specific Java runtime,
-# if provided by your distribution.
-- name: 2.2.2 Ensure X Window System is not installed
-  apt:
-    name: ["xserver-xorg*"]
-    state: absent
-    purge: true
-    autoremove: true
-  tags:
-    - section2
-    - level_1_server
-    - 2.2.2
-    - scored
-  when: debian12cis_rules_2_2_2
 # 2.2.3 Ensure Avahi Server is not enabled
 # Avahi is a free zeroconf implementation, including a system for multicast DNS/DNS-SD
 # service discovery. Avahi allows programs to publish and discover services and hosts
