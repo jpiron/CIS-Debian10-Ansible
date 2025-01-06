@@ -240,22 +240,6 @@
     - 2.1.9
     - scored
   when: debian12cis_rules_2_1_9
-# 2.1.2 Ensure openbsd-inetd is not installed
-# The inetd daemon listens for well known services and dispatches the appropriate daemon
-# to properly respond to service requests.
-- name: 2.1.2 Ensure openbsd-inetd is not installed
-  apt:
-    name: openbsd-inetd
-    state: absent
-    purge: true
-    autoremove: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.1.2
-    - scored
-  when: debian12cis_rules_2_1_2
 # 2.1.10 Ensure nis server services are not in use
 # The Network Information Service (NIS) (formally known as Yellow Pages) is a client-server directory service protocol for distributing system configuration files. The NIS server is a collection of programs that allow for the distribution of configuration files. The NIS client ( ypbind ) was used to bind a machine to an NIS server and receive the distributed configuration files.
 # ypserv.service is inherently an insecure system that has been vulnerable to DOS attacks, buffer overflows and has poor authentication for querying NIS maps. NIS generally has been replaced by such protocols as Lightweight Directory Access Protocol (LDAP). It is recommended that ypserv.service be removed and other, more secure services be used
@@ -541,15 +525,22 @@
     - 2.1.20
     - scored
   when: debian12cis_rules_2_1_20
-# 2.2 Special Purpose Services
-# 2.2.1 Time Synchronization
-# If access to a physical host's clock is available and configured according to site policy,
-# this section can be skipped
-# Only one time synchronization method should be in use on the system
-# Only the section related to the time synchronization method in use on the system
-# should be followed, all other time synchronization recommendations should be skipped
-# If access to a physical host's clock is available and configured according to site policy,
-# systemd-timesyncd should be stopped and masked
+# 2.2.1 Ensure NIS Client is not installed
+# The Network Information Service (NIS), formerly known as Yellow Pages, is a client-server directory service protocol used to distribute system configuration files. The NIS client was used to bind a machine to an NIS server and receive the distributed configuration files.
+# The NIS service is inherently an insecure system that has been vulnerable to DOS attacks, buffer overflows and has poor authentication for querying NIS maps. NIS generally has been replaced by such protocols as Lightweight Directory Access Protocol (LDAP). It is recommended that the service be removed.
+- name: 2.2.1 Ensure NIS Client is not installed
+  apt:
+    name: nis
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.1
+    - scored
+  when: debian12cis_rules_2_2_1
 # 2.2.1.1 Ensure time synchronization is in use
 # System time should be synchronized between all systems in an environment. This is
 # typically done by establishing an authoritative time server or set of servers and having all
@@ -634,31 +625,6 @@
     - 2.2.1.4
     - scored
   when: debian12cis_rules_2_2_1_4
-# 2.2.7 Ensure NFS is not enabled
-# The Network File System (NFS) is one of the first and most widely distributed file systems
-# in the UNIX environment. It provides the ability for systems to mount file systems of other
-# servers through the network.
-- name: 2.2.7 Ensure NFS is not enabled
-  block:
-    - name: 2.2.7 Ensure NFS is not enabled - nfs-server
-      service:
-        name: nfs-server
-        state: stopped
-        enabled : no
-      ignore_errors: true
-    - name: 2.2.7 Ensure RPC is not enabled - rpcbind
-      service:
-        name: rpcbind
-        state: stopped
-        enabled : no
-      ignore_errors: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.7
-    - scored
-  when: debian12cis_rules_2_2_7
 # 2.2.10 Ensure HTTP server is not enabled
 # HTTP or web servers provide the ability to host web site content.
 # Note: Several httpd servers exist and can use other service names. apache2 and nginx are
@@ -684,28 +650,6 @@
     - 2.2.10
     - scored
   when: debian12cis_rules_2_2_10
-# 2.2.11 Ensure email services are not enabled
-# dovecot is an open source mail submission and transport server for Linux based systems.
-# Note: Several IMAP/POP3 servers exist and can use other service names. courier-imap and
-# cyrus-imap are example services that provide a mail server. These and other services should
-# also be audited.
-- name: 2.2.11 Ensure email services are not enabled
-  service:
-    name: "{{ item }}"
-    state: stopped
-    enabled : no
-  with_items:
-    - "dovecot"
-    - "dovecot-imapd"
-    - "dovecot-pop3d"
-  ignore_errors: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.11
-    - scored
-  when: debian12cis_rules_2_2_11
 # 2.2.15 Ensure mail transfer agent is configured for local-only mode
 # Mail Transfer Agents (MTA), such as sendmail and Postfix, are used to listen for incoming
 # mail and transfer the messages to the appropriate user or mail server. If the system is not
