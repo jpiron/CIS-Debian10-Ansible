@@ -83,6 +83,33 @@
     - 2.1.11
     - scored
   when: debian12cis_rules_2_1_11
+# 2.1.12 Ensure rpcbind services are not in use
+# The rpcbind utility maps RPC services to the ports on which they listen. RPC processes notify rpcbind when they start, registering the ports they are listening on and the RPC program numbers they expect to serve. The client system then contacts rpcbind on the server with a particular RPC program number. The rpcbind.service redirects the client to the proper port number so it can communicate with the requested service.
+# A small request (~82 bytes via UDP) sent to the Portmapper generates a large response (7x to 28x amplification), which makes it a suitable tool for DDoS attacks. If rpcbind is not required, it is recommended to remove rpcbind package to reduce the potential attack surface.
+- name: 2.1.12 Ensure print server services are not in use
+  vars:
+   rpcbind_services:
+    - rpcbind.socket
+    - rpcbind.service
+  block:
+    - name: 2.1.12 Ensure rpcbind services are not in use - sysctl
+      sysctl:
+        name: "{{ item }}"
+        state: absent
+      loop: rpcbind_services
+    - name: "2.1.12 Ensure rpcbind services are not in use - apt"
+      apt:
+        name: rpcbind
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.12
+    - scored
+  when: debian12cis_rules_2_1_12
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
