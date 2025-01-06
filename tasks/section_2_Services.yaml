@@ -40,9 +40,11 @@
 - name: 2.1.10 Ensure nis server services are not in use
   block:
     - name: 2.1.10 Ensure nis server services are not in use - sysctl
-      sysctl:
+      service:
         name: ypserv.service
-        state: absent
+        state: stopped
+        enabled : no
+      ignore_errors: true
     - name: "2.1.10 Ensure nis server services are not in use - apt"
       apt:
         name: ypserv
@@ -66,9 +68,11 @@
     - cups.service
   block:
     - name: 2.1.11 Ensure print server services are not in use - sysctl
-      sysctl:
+      service:
         name: "{{ item }}"
-        state: absent
+        state: stopped
+        enabled : no
+      ignore_errors: true
       loop: print_server_services
     - name: "2.1.11 Ensure print server services are not in use - apt"
       apt:
@@ -93,9 +97,11 @@
     - rpcbind.service
   block:
     - name: 2.1.12 Ensure rpcbind services are not in use - sysctl
-      sysctl:
+      service:
         name: "{{ item }}"
-        state: absent
+        state: stopped
+        enabled : no
+      ignore_errors: true
       loop: rpcbind_services
     - name: "2.1.12 Ensure rpcbind services are not in use - apt"
       apt:
@@ -116,9 +122,11 @@
 - name: 2.1.13 Ensure rsync services are not in use
   block:
     - name: 2.1.13 Ensure rsync services are not in use - sysctl
-      sysctl:
-        name: rsync.service
-        state: absent
+      service:
+        name: rsync
+        state: stopped
+        enabled : no
+      ignore_errors: true
     - name: "2.1.13 Ensure rsync services are not in use - apt"
       apt:
         name: rsync
