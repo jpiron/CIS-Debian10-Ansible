@@ -166,6 +166,37 @@
     - 2.1.14
     - scored
   when: debian12cis_rules_2_1_14
+# 2.1.15 Ensure SNMP Server is not enabled
+# Simple Network Management Protocol (SNMP) is a widely used protocol for monitoring the
+# health and welfare of network equipment, computer equipment and devices like UPSs.
+# Net-SNMP is a suite of applications used to implement SNMPv1 (RFC 1157), SNMPv2 (RFCs
+# 1901-1908), and SNMPv3 (RFCs 3411-3418) using both IPv4 and IPv6.
+# Support for SNMPv2 classic (a.k.a. "SNMPv2 historic" - RFCs 1441-1452) was dropped with
+# the 4.0 release of the UCD-snmp package.
+# The Simple Network Management Protocol (SNMP) server is used to listen for SNMP
+# commands from an SNMP management system, execute the commands or collect the
+# information and then send results back to the requesting system.
+- name: 2.1.15 Ensure SNMP Server is not enabled
+  block:
+    - name: 2.1.15 Ensure SNMP Server is not enabled - sysctl
+      service:
+        name: snmpd
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.15 Ensure SNMP Server is not enabled - apt
+      apt:
+        name: snmpd
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.15
+    - scored
+  when: debian12cis_rules_2_1_15
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
@@ -468,29 +499,6 @@
     - 2.2.13
     - scored
   when: debian12cis_rules_2_2_13
-# 2.2.14 Ensure SNMP Server is not enabled
-# Simple Network Management Protocol (SNMP) is a widely used protocol for monitoring the
-# health and welfare of network equipment, computer equipment and devices like UPSs.
-# Net-SNMP is a suite of applications used to implement SNMPv1 (RFC 1157), SNMPv2 (RFCs
-# 1901-1908), and SNMPv3 (RFCs 3411-3418) using both IPv4 and IPv6.
-# Support for SNMPv2 classic (a.k.a. "SNMPv2 historic" - RFCs 1441-1452) was dropped with
-# the 4.0 release of the UCD-snmp package.
-# The Simple Network Management Protocol (SNMP) server is used to listen for SNMP
-# commands from an SNMP management system, execute the commands or collect the
-# information and then send results back to the requesting system.
-- name: 2.2.14 Ensure SNMP Server is not enabled
-  service:
-    name: snmpd
-    state: stopped
-    enabled : no
-  ignore_errors: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.14
-    - scored
-  when: debian12cis_rules_2_2_14
 # 2.2.15 Ensure mail transfer agent is configured for local-only mode
 # Mail Transfer Agents (MTA), such as sendmail and Postfix, are used to listen for incoming
 # mail and transfer the messages to the appropriate user or mail server. If the system is not
