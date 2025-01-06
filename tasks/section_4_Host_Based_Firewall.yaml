@@ -1,5 +1,5 @@
 ---
-# 4 Logging and Auditing
+# 4 Host based firewall
 # 4.1 Configure System Accounting (auditd)
 # 4.1.1 Ensure auditing is enabled
 # 4.1.1.1 Ensure auditd is installed

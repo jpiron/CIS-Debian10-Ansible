@@ -1,4 +1,5 @@
 ---
+# Initial setup
 # 1.1.1.1 Ensure cramfs kernel module is not available
 # The cramfs filesystem type is a compressed read-only Linux filesystem embedded in small footprint systems.
 # A cramfs image can be used without having to first decompress the image.
