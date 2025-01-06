@@ -34,6 +34,28 @@
     - 2.1.2
     - scored
   when: debian12cis_rules_2_1_2
+# 2.1.10 Ensure nis server services are not in use
+# The Network Information Service (NIS) (formally known as Yellow Pages) is a client-server directory service protocol for distributing system configuration files. The NIS server is a collection of programs that allow for the distribution of configuration files. The NIS client ( ypbind ) was used to bind a machine to an NIS server and receive the distributed configuration files.
+# ypserv.service is inherently an insecure system that has been vulnerable to DOS attacks, buffer overflows and has poor authentication for querying NIS maps. NIS generally has been replaced by such protocols as Lightweight Directory Access Protocol (LDAP). It is recommended that ypserv.service be removed and other, more secure services be used
+- name: 2.1.10 Ensure nis server services are not in use
+  block:
+    - name: 2.1.10 Ensure nis server services are not in use - sysctl
+      sysctl:
+        name: ypserv.service
+        state: absent
+    - name: "2.1.10 Ensure nis server services are not in use - apt"
+      apt:
+        name: ypserv
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.10
+    - scored
+  when: debian12cis_rules_2_1_10
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
