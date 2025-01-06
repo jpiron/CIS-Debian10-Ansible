@@ -56,6 +56,33 @@
     - 2.1.10
     - scored
   when: debian12cis_rules_2_1_10
+# 2.1.11 Ensure print server services are not in use
+# The Common Unix Print System (CUPS) provides the ability to print to both local and network printers. A system running CUPS can also accept print jobs from remote systems and print them to local printers. It also provides a web based remote administration capability.
+# If the system does not need to print jobs or accept print jobs from other systems, it is recommended that CUPS be removed to reduce the potential attack surface.
+- name: 2.1.11 Ensure print server services are not in use
+  vars:
+   print_server_services:
+    - cups.socket
+    - cups.service
+  block:
+    - name: 2.1.11 Ensure print server services are not in use - sysctl
+      sysctl:
+        name: "{{ item }}"
+        state: absent
+      loop: print_server_services
+    - name: "2.1.11 Ensure print server services are not in use - apt"
+      apt:
+        name: cups
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.11
+    - scored
+  when: debian12cis_rules_2_1_11
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
