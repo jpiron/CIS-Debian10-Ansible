@@ -216,6 +216,30 @@
     - 2.1.8
     - scored
   when: debian12cis_rules_2_1_8
+# 2.1.9 Ensure network file system services are not in use
+# The Network File System (NFS) is one of the first and most widely distributed file systems in the UNIX environment. It provides the ability for systems to mount file systems of other servers through the network.
+# If the system does not export NFS shares, it is recommended that the nfs-kernel-server package be removed to reduce the remote attack surface.
+- name: 2.1.9 Ensure network file system services are not in use
+  block:
+    - name: 2.1.9 Ensure network file system services are not in use - sysctl
+      service:
+        name: nfs-server.service
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.9 Ensure network file system services are not in use - apt
+      apt:
+        name: nfs-kernel-server
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.9
+    - scored
+  when: debian12cis_rules_2_1_9
 # 2.1.2 Ensure openbsd-inetd is not installed
 # The inetd daemon listens for well known services and dispatches the appropriate daemon
 # to properly respond to service requests.
