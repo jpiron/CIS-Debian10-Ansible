@@ -110,6 +110,28 @@
     - 2.1.12
     - scored
   when: debian12cis_rules_2_1_12
+# 2.1.13 Ensure rsync services are not in use
+# The rsync service can be used to synchronize files between systems over network links.
+# rsync.service presents a security risk as the rsync protocol is unencrypted. The rsync package should be removed to reduce the attack area of the system.
+- name: 2.1.13 Ensure rsync services are not in use
+  block:
+    - name: 2.1.13 Ensure rsync services are not in use - sysctl
+      sysctl:
+        name: rsync.service
+        state: absent
+    - name: "2.1.13 Ensure rsync services are not in use - apt"
+      apt:
+        name: rsync
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.13
+    - scored
+  when: debian12cis_rules_2_1_13
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
