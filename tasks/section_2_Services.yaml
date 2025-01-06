@@ -159,6 +159,30 @@
     - 2.1.6
     - scored
   when: debian12cis_rules_2_1_6
+# 2.1.7 Ensure ldap server services are not in use
+# The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for NIS/YP. It is a service that provides a method for looking up information from a central database.
+# If the system will not need to act as an LDAP server, it is recommended that the software be removed to reduce the potential attack surface.
+- name: 2.1.7 Ensure ldap server services are not in use
+  block:
+    - name: 2.1.7 Ensure ldap server services are not in use - sysctl
+      service:
+        name: slapd.service
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.7 Ensure ldap server services are not in use - apt
+      apt:
+        name: slapd
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.7
+    - scored
+  when: debian12cis_rules_2_1_7
 # 2.1.2 Ensure openbsd-inetd is not installed
 # The inetd daemon listens for well known services and dispatches the appropriate daemon
 # to properly respond to service requests.
