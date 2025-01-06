@@ -246,6 +246,40 @@
     - 2.1.17
     - scored
   when: debian12cis_rules_2_1_17
+# 2.1.18 Ensure web server services are not in use
+# Web servers provide the ability to host web site content.
+# Unless there is a local site approved requirement to run a web server service on the system, web server packages should be removed to reduce the potential attack surface.
+- name: 2.1.18 Ensure web proxy server services are not in use
+  vars:
+    web_server_services:
+      - apache2
+      - httpd
+      - nginx
+    web_server_libraries:
+      - apache2
+      - nginx
+  block:
+    - name: 2.1.18 Ensure web server services are not in use - sysctl
+      service:
+        name: "{{ item }}"
+        state: stopped
+        enabled : no
+      ignore_errors: true
+      loop: web_server_services
+    - name: 2.1.18 Ensure web server services are not in use - apt
+      apt:
+        name: "{{ item }}"
+        state: absent
+        purge: true
+        autoremove: true
+      loop: web_server_libraries
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.18
+    - scored
+  when: debian12cis_rules_2_1_18
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
