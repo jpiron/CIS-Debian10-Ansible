@@ -183,6 +183,39 @@
     - 2.1.7
     - scored
   when: debian12cis_rules_2_1_7
+# 2.1.8 Ensure message access server services are not in use
+# dovecot-imapd and dovecot-pop3d are an open source IMAP and POP3 server for Linux based systems.
+# Unless POP3 and/or IMAP servers are to be provided by this system, it is recommended that the package be removed to reduce the potential attack surface.
+- name: 2.1.8 Ensure message access server services are not in use
+  vars:
+    message_access_server_services:
+      - dovecot.socket
+      - dovecot.service
+    message_access_server_libraries:
+      - dovecot-imapd
+      - dovecot-pop3d
+  block:
+    - name: 2.1.8 Ensure message access server services are not in use - sysctl
+      service:
+        name: "{{ item }}"
+        state: stopped
+        enabled : no
+      ignore_errors: true
+      loop: message_access_server_services
+    - name: 2.1.8 Ensure message access server services are not in use - apt
+      apt:
+        name: "{{ item }}"
+        state: absent
+        purge: true
+        autoremove: true
+      loop: message_access_server_libraries
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.8
+    - scored
+  when: debian12cis_rules_2_1_8
 # 2.1.2 Ensure openbsd-inetd is not installed
 # The inetd daemon listens for well known services and dispatches the appropriate daemon
 # to properly respond to service requests.
@@ -577,23 +610,6 @@
     - 2.2.1.4
     - scored
   when: debian12cis_rules_2_2_1_4
-# 2.2.6 Ensure LDAP server is not enabled
-# The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for
-# NIS/YP. It is a service that provides a method for looking up information from a central
-# database.
-- name: 2.2.6 Ensure LDAP server is not enabled
-  service:
-    name: slapd
-    state: stopped
-    enabled : no
-  ignore_errors: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.6
-    - scored
-  when: debian12cis_rules_2_2_6
 # 2.2.7 Ensure NFS is not enabled
 # The Network File System (NFS) is one of the first and most widely distributed file systems
 # in the UNIX environment. It provides the ability for systems to mount file systems of other
