@@ -45,7 +45,7 @@
         state: stopped
         enabled : no
       ignore_errors: true
-    - name: "2.1.10 Ensure nis server services are not in use - apt"
+    - name: 2.1.10 Ensure nis server services are not in use - apt
       apt:
         name: ypserv
         state: absent
@@ -74,7 +74,7 @@
         enabled : no
       ignore_errors: true
       loop: print_server_services
-    - name: "2.1.11 Ensure print server services are not in use - apt"
+    - name: 2.1.11 Ensure print server services are not in use - apt
       apt:
         name: cups
         state: absent
@@ -103,7 +103,7 @@
         enabled : no
       ignore_errors: true
       loop: rpcbind_services
-    - name: "2.1.12 Ensure rpcbind services are not in use - apt"
+    - name: 2.1.12 Ensure rpcbind services are not in use - apt
       apt:
         name: rpcbind
         state: absent
@@ -127,7 +127,7 @@
         state: stopped
         enabled : no
       ignore_errors: true
-    - name: "2.1.13 Ensure rsync services are not in use - apt"
+    - name: 2.1.13 Ensure rsync services are not in use - apt
       apt:
         name: rsync
         state: absent
@@ -140,6 +140,32 @@
     - 2.1.13
     - scored
   when: debian12cis_rules_2_1_13
+# 2.1.14 Ensure Samba is not enabled
+# The Samba daemon allows system administrators to configure their Linux systems to share
+# file systems and directories with Windows desktops. Samba will advertise the file systems
+# and directories via the Server Message Block (SMB) protocol. Windows desktop users will
+# be able to mount these directories and file systems as letter drives on their systems.
+- name: 2.1.14 Ensure Samba is not enabled
+  block:
+    - name: 2.1.14 Ensure Samba is not enabled - sysctl
+      service:
+        name: smbd
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.14 Ensure Samba is not enabled - apt
+      apt:
+        name: samba
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.14
+    - scored
+  when: debian12cis_rules_2_1_14
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
@@ -426,24 +452,6 @@
     - 2.2.11
     - scored
   when: debian12cis_rules_2_2_11
-# 2.2.12 Ensure Samba is not enabled
-# The Samba daemon allows system administrators to configure their Linux systems to share
-# file systems and directories with Windows desktops. Samba will advertise the file systems
-# and directories via the Server Message Block (SMB) protocol. Windows desktop users will
-# be able to mount these directories and file systems as letter drives on their systems.
-- name: 2.2.12 Ensure Samba is not enabled
-  service:
-    name: samba
-    state: stopped
-    enabled : no
-  ignore_errors: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.12
-    - scored
-  when: debian12cis_rules_2_2_12
 # 2.2.13 Ensure HTTP Proxy Server is not enabled
 # Squid is a standard proxy server used in many distributions and environments.
 # Note: Several HTTP proxy servers exist. These and other services should be checked
