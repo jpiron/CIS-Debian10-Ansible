@@ -197,6 +197,31 @@
     - 2.1.15
     - scored
   when: debian12cis_rules_2_1_15
+# 2.1.16 Ensure tftp server services are not in use
+# Trivial File Transfer Protocol (TFTP) is a simple protocol for exchanging files between two TCP/IP machines. TFTP servers allow connections from a TFTP Client for sending and receiving files.
+# Unless there is a need to run the system as a TFTP server, it is recommended that the package be removed to reduce the potential attack surface.
+# TFTP does not have built-in encryption, access control or authentication. This makes it very easy for an attacker to exploit TFTP to gain access to files.
+- name: 2.1.16 Ensure tftp server services are not in use
+  block:
+    - name: 2.1.16 Ensure tftp server services are not in use - sysctl
+      service:
+        name: tftpd-hpa
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.16 Ensure tftp server services are not in use - apt
+      apt:
+        name: tftpd-hpa
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.16
+    - scored
+  when: debian12cis_rules_2_1_16
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
