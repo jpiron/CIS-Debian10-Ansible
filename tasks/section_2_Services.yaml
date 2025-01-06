@@ -222,6 +222,30 @@
     - 2.1.16
     - scored
   when: debian12cis_rules_2_1_16
+# 2.1.17 Ensure web proxy server services are not in use
+# Squid is a standard proxy server used in many distributions and environments.
+# Unless a system is specifically set up to act as a proxy server, it is recommended that the squid package be removed to reduce the potential attack surface.
+- name: 2.1.17 Ensure web proxy server services are not in use
+  block:
+    - name: 2.1.17 Ensure web proxy server services are not in use - sysctl
+      service:
+        name: squid
+        state: stopped
+        enabled : no
+      ignore_errors: true
+    - name: 2.1.17 Ensure web proxy server services are not in use - apt
+      apt:
+        name: squid
+        state: absent
+        purge: true
+        autoremove: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.17
+    - scored
+  when: debian12cis_rules_2_1_17
 # 2.2 Special Purpose Services
 # 2.2.1 Time Synchronization
 # If access to a physical host's clock is available and configured according to site policy,
@@ -508,22 +532,6 @@
     - 2.2.11
     - scored
   when: debian12cis_rules_2_2_11
-# 2.2.13 Ensure HTTP Proxy Server is not enabled
-# Squid is a standard proxy server used in many distributions and environments.
-# Note: Several HTTP proxy servers exist. These and other services should be checked
-- name: 2.2.13 Ensure HTTP Proxy Server is not enabled
-  service:
-    name: squid
-    state: stopped
-    enabled : no
-  ignore_errors: true
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.2.13
-    - scored
-  when: debian12cis_rules_2_2_13
 # 2.2.15 Ensure mail transfer agent is configured for local-only mode
 # Mail Transfer Agents (MTA), such as sendmail and Postfix, are used to listen for incoming
 # mail and transfer the messages to the appropriate user or mail server. If the system is not
