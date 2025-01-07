@@ -70,11 +70,22 @@
 # If the protocol is not required, it is recommended that the drivers not be installed to reduce
 # the potential attack surface.
 - name: 3.2.1 Ensure dccp kernel module is not available
-  lineinfile:
-    dest: /etc/modprobe.d/CIS.conf
-    regexp: "^(#)?install dccp(\\s|$)"
-    line: "install dccp /bin/true"
-    create: true
+  block:
+    - name: Create blacklist configuration for dccp
+      copy:
+        dest: /etc/modprobe.d/blacklist-dccp.conf
+        content: |
+          # Disable dccp module
+          blacklist dccp
+          install dccp /bin/true
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Ensure the dccp module is not loaded
+      command: rmmod dccp
+      ignore_errors: true
+    - name: Update the initramfs to apply the blacklist
+      command: update-initramfs -u
   tags:
     - section3
     - level_2_server
@@ -82,6 +93,60 @@
     - 3.2.1
     - scored
   when: debian12cis_rules_3_2_1
+# 3.2.2 Ensure tipc kernel module is not available
+# The Transparent Inter-Process Communication (TIPC) protocol is designed to provide
+# communication between cluster nodes.
+- name: 3.2.2 Ensure tipc kernel module is not available
+  block:
+    - name: Create blacklist configuration for tipc
+      copy:
+        dest: /etc/modprobe.d/blacklist-tipc.conf
+        content: |
+          # Disable tipc module
+          blacklist tipc
+          install tipc /bin/true
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Ensure the tipc module is not loaded
+      command: rmmod tipc
+      ignore_errors: true
+    - name: Update the initramfs to apply the blacklist
+      command: update-initramfs -u
+  tags:
+    - section3
+    - level_2_server
+    - level_2_workstation
+    - 3.2.2
+    - scored
+  when: debian12cis_rules_3_2_2
+# 3.2.3 Ensure rds kernel module is not available
+# The Reliable Datagram Sockets (RDS) protocol is a transport layer protocol designed to provide low-latency, high-bandwidth communications between cluster nodes. It was developed by the Oracle Corporation.
+# If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.
+- name: 3.2.3 Ensure rds kernel module is not available
+  block:
+    - name: Create blacklist configuration for tipc
+      copy:
+        dest: /etc/modprobe.d/blacklist-rds.conf
+        content: |
+          # Disable rds module
+          blacklist rds
+          install rds /bin/true
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Ensure the rds module is not loaded
+      command: rmmod rds
+      ignore_errors: true
+    - name: Update the initramfs to apply the blacklist
+      command: update-initramfs -u
+  tags:
+    - section3
+    - level_2_server
+    - level_2_workstation
+    - 3.2.3
+    - scored
+  when: debian12cis_rules_3_2_3
 # 3.2.1 Ensure packet redirect sending is disabled
 # ICMP Redirects are used to send routing information to other hosts. As a host itself does
 # not act as a router (in a host only configuration), there is no need to send redirects.
@@ -452,22 +517,6 @@
     - 3.4.3
     - scored
   when: debian12cis_rules_3_4_3
-# 3.4.4 Ensure TIPC is disabled
-# The Transparent Inter-Process Communication (TIPC) protocol is designed to provide
-# communication between cluster nodes.
-- name: 3.4.4 Ensure TIPC is disabled
-  lineinfile:
-    dest: /etc/modprobe.d/CIS.conf
-    regexp: "^(#)?install tipc(\\s|$)"
-    line: "install tipc /bin/true"
-    create: true
-  tags:
-    - section3
-    - level_2_server
-    - level_2_workstation
-    - 3.4.4
-    - scored
-  when: debian12cis_rules_3_4_4
 # 3.5 Firewall Configuration
 # Only one method should be used to configure a firewall on the system. Use of more
 # than one method could produce unexpected results
