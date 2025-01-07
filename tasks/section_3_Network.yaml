@@ -147,34 +147,65 @@
     - 3.2.3
     - scored
   when: debian12cis_rules_3_2_3
-# 3.2.1 Ensure packet redirect sending is disabled
-# ICMP Redirects are used to send routing information to other hosts. As a host itself does
-# not act as a router (in a host only configuration), there is no need to send redirects.
-- name: 3.2.1 Ensure packet redirect sending is disabled
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-    sysctl_set: true
-    state: present
-    reload: true
-  with_items:
-    - { name: net.ipv4.conf.all.send_redirects, value: 0 }
-    - { name: net.ipv4.conf.default.send_redirects, value: 0 }
-  notify:
-    - ipv4 flush route
+# 3.2.3 Ensure rds kernel module is not available
+# The Reliable Datagram Sockets (RDS) protocol is a transport layer protocol designed to provide low-latency, high-bandwidth communications between cluster nodes. It was developed by the Oracle Corporation.
+# If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.
+- name: 3.2.3 Ensure rds kernel module is not available
+  block:
+    - name: Create blacklist configuration for rds
+      copy:
+        dest: /etc/modprobe.d/blacklist-rds.conf
+        content: |
+          # Disable rds module
+          blacklist rds
+          install rds /bin/true
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Ensure the rds module is not loaded
+      command: rmmod rds
+      ignore_errors: true
+    - name: Update the initramfs to apply the blacklist
+      command: update-initramfs -u
   tags:
     - section3
-    - level_1_server
-    - level_1_workstation
-    - 3.2.1
+    - level_2_server
+    - level_2_workstation
+    - 3.2.3
     - scored
-  when: debian12cis_rules_3_2_1
-# 3.2.2 Ensure IP forwarding is disabled
-# Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router.
-- name: 3.2.2 Ensure IP forwarding is disabled
+  when: debian12cis_rules_3_2_3
+# 3.2.4 Ensure sctp kernel module is not available
+# The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to support message oriented communication, with several streams of messages in one connection. It serves a similar function as TCP and UDP, incorporating features of both. It is message-oriented like UDP, and ensures reliable in-sequence transport of messages with congestion control like TCP.
+# If  the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.
+- name: 3.2.4 Ensure sctp kernel module is not available
   block:
-    - name: 3.2.2 Ensure IP forwarding is disabled - ipv4
+    - name: Create blacklist configuration for sctp
+      copy:
+        dest: /etc/modprobe.d/blacklist-sctp.conf
+        content: |
+          # Disable sctp module
+          blacklist sctp
+          install sctp /bin/true
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Ensure the sctp module is not loaded
+      command: rmmod sctp
+      ignore_errors: true
+    - name: Update the initramfs to apply the blacklist
+      command: update-initramfs -u
+  tags:
+    - section3
+    - level_2_server
+    - level_2_workstation
+    - 3.2.4
+    - scored
+  when: debian12cis_rules_3_2_4
+# 3.3.1 Ensure ip forwarding is disabled
+# Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router.
+- name: 3.3.1 Ensure ip forwarding is disabled
+  block:
+    - name: 3.3.1 Ensure IP forwarding is disabled - ipv4
       sysctl:
         name: net.ipv4.ip_forward
         value: "0"
@@ -183,32 +214,93 @@
         reload: true
       notify:
         - ipv4 flush route
-    - name: 3.2.2 Ensure IP forwarding is disabled - ipv6
-      sysctl:
-        name: net.ipv6.conf.all.forwarding
-        value: "0"
-        sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-        state: present
-        reload: true
-      notify:
-        - ipv4 flush route
-      when: IPv6_is_enabled
-    - name: 3.2.2 Ensure IP forwarding is disabled - ipv4 fix
+    - name: 3.3.1 Ensure IP forwarding is disabled - ipv4 fix
       shell: grep -Els "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.ip_forward\s*)(=)(\s*\S+\b).*$/#*REMOVED* \1/" $filename; echo $filename ; done
-      register: output_3_2_2
-      changed_when: output_3_2_2.stdout_lines | length > 0
-    - name: 3.2.2 Ensure IP forwarding is disabled - ipv6 fix
-      shell: grep -Els "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv6\.conf\.all\.forwarding\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; echo $filename ; done
-      register: output_3_2_2_v6
-      changed_when: output_3_2_2_v6.stdout_lines | length > 0
-      when: IPv6_is_enabled
+      register: output_3_3_1
+      changed_when: output_3_3_1.stdout_lines | length > 0
   tags:
     - section3
     - level_1_server
     - level_1_workstation
-    - 3.2.2
+    - 3.3.1
     - scored
-  when: debian12cis_rules_3_2_2
+  when: debian12cis_rules_3_3_1
+# 3.3.2 Ensure packet redirect sending is disabled
+# ICMP Redirects are used to send routing information to other hosts. As a host itself does
+# not act as a router (in a host only configuration), there is no need to send redirects.
+- name: 3.3.2 Ensure packet redirect sending is disabled
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
+    sysctl_set: true
+    state: present
+    reload: true
+  with_items:
+    - {
+        name: net.ipv4.conf.all.send_redirects,
+        value: 0
+      }
+    - {
+        name: net.ipv4.conf.default.send_redirects,
+        value: 0
+      }
+  notify:
+    - ipv4 flush route
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.2
+    - scored
+  when: debian12cis_rules_3_3_2
+# 3.3.10 Ensure tcp syn cookies is enabled
+# Attackers use SYN flood attacks to perform a denial of service attacked on a system by
+# sending many SYN packets without completing the three way handshake. This will quickly
+# use up slots in the kernel's half-open connection queue and prevent legitimate connections
+# from succeeding. SYN cookies allow the system to keep accepting valid connections, even if
+# under a denial of service attack.
+- name: 3.3.10 Ensure tcp syn cookies is enabled
+  sysctl:
+    name: net.ipv4.tcp_syncookies
+    value: "1"
+    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
+    state: present
+    reload: true
+  notify:
+    - ipv4 flush route
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.10
+    - scored
+  when: debian12cis_rules_3_3_10
+# 3.3.11 Ensure ipv6 router advertisements are not accepted
+# It is recommended that systems do not accept router advertisements as they could be
+# tricked into routing traffic to compromised machines. Setting hard routes within the
+# system (usually a single default route to a trusted router) protects the system from bad
+# routes.
+- name: 3.3.11 Ensure ipv6 router advertisements are not accepted
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
+    state: present
+    reload: true
+  with_items:
+    - { name: net.ipv6.conf.all.accept_ra, value: 0 }
+    - { name: net.ipv6.conf.default.accept_ra, value: 0 }
+  notify:
+    - ipv6 flush route
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.11
+    - scored
+  when: IPv6_is_enabled and
+        debian12cis_rules_3_3_11
 # 3.3 Network Parameters (Host and Router)
 # 3.3.1 Ensure source routed packets are not accepted
 # Setting net.ipv4.conf.all.accept_source_route,
@@ -429,53 +521,6 @@
     - 3.3.7
     - scored
   when: debian12cis_rules_3_3_7
-# 3.3.8 Ensure TCP SYN Cookies is enabled
-# Attackers use SYN flood attacks to perform a denial of service attacked on a system by
-# sending many SYN packets without completing the three way handshake. This will quickly
-# use up slots in the kernel's half-open connection queue and prevent legitimate connections
-# from succeeding. SYN cookies allow the system to keep accepting valid connections, even if
-# under a denial of service attack.
-- name: 3.3.8 Ensure TCP SYN Cookies is enabled
-  sysctl:
-    name: net.ipv4.tcp_syncookies
-    value: "1"
-    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-    state: present
-    reload: true
-  notify:
-    - ipv4 flush route
-  tags:
-    - section3
-    - level_1_server
-    - level_1_workstation
-    - 3.3.8
-    - scored
-  when: debian12cis_rules_3_3_8
-# 3.3.9 Ensure IPv6 router advertisements are not accepted
-# It is recommended that systems do not accept router advertisements as they could be
-# tricked into routing traffic to compromised machines. Setting hard routes within the
-# system (usually a single default route to a trusted router) protects the system from bad
-# routes.
-- name: 3.3.9 Ensure IPv6 router advertisements are not accepted
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-    state: present
-    reload: true
-  with_items:
-    - { name: net.ipv6.conf.all.accept_ra, value: 0 }
-    - { name: net.ipv6.conf.default.accept_ra, value: 0 }
-  notify:
-    - ipv6 flush route
-  tags:
-    - section3
-    - level_1_server
-    - level_1_workstation
-    - 3.3.9
-    - scored
-  when: IPv6_is_enabled and
-        debian12cis_rules_3_3_9
 # 3.4 Uncommon Network Protocols
 # 3.4.2 Ensure SCTP is disabled
 # The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to
