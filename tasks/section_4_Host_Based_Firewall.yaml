@@ -183,6 +183,24 @@
     - 4.2.1
     - not-scored
   when: debian12cis_rules_4_2_1
+# 4.2.10 Ensure nftables rules are permanent
+# nftables is a subsystem of the Linux kernel providing filtering and classification of network packets/datagrams/frames.
+# The nftables service reads the /etc/nftables.conf file for a nftables file or files to include in the nftables ruleset.
+# A nftables ruleset containing the input, forward, and output base chains allow network traffic to be filtered.
+# Changes made to nftables ruleset only affect the live system, you will also need to configure the nftables ruleset to apply on boot.
+- name: 4.2.10 Ensure nftables rules are permanent
+  lineinfile:
+    path: /etc/nftables.conf
+    line: 'include "/etc/nftables.rules"'
+    state: present
+  notify: nftables restart
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.10
+    - not-scored
+  when: debian12cis_rules_4_2_10
 # 4.5.3.3 Ensure base chains exist
 # Chains are containers for rules. They exist in two kinds, base chains and regular chains. A
 # base chain is an entry point for packets from the networking stack, a regular chain may be

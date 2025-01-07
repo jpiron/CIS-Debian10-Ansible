@@ -31,3 +31,7 @@
   service:
     name: systemd-timesyncd
     state: restarted
+- name: nftables restart
+  service:
+    name: nftables
+    state: restarted
