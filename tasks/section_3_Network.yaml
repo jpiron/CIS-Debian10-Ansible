@@ -254,6 +254,51 @@
     - 3.3.2
     - scored
   when: debian12cis_rules_3_3_2
+# 3.3.3 Ensure bogus ICMP responses are ignored
+# Some routers (and some attackers) will send responses that violate RFC-1122 and attempt
+# to fill up a log file system with many useless error messages.
+- name: 3.3.3 Ensure bogus ICMP responses are ignored
+  sysctl:
+    name: net.ipv4.icmp_ignore_bogus_error_responses
+    value: "1"
+    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
+    state: present
+    reload:
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.3
+    - scored
+  when: enable_firewall and
+        firewall_type == "nftables" and
+        debian12cis_rules_3_3_3
+# 3.3.4 Ensure broadcast icmp requests are ignored
+# Accepting ICMP echo and timestamp requests with broadcast or multicast destinations for
+# your network could be used to trick your host into starting (or participating) in a Smurf
+# attack. A Smurf attack relies on an attacker sending large amounts of ICMP broadcast
+# messages with a spoofed source address. All hosts receiving this message and responding
+# would send echo-reply messages back to the spoofed address, which is probably not
+# routable. If many hosts respond to the packets, the amount of traffic on the network could
+# be significantly multiplied.
+- name: 3.3.4 Ensure broadcast icmp requests are ignored
+  block:
+    - name: 3.3.4 Ensure broadcast icmp requests are ignored - ipv4
+      sysctl:
+        name: net.ipv4.icmp_echo_ignore_broadcasts
+        value: "1"
+        sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
+        state: present
+        reload: true
+      notify:
+        - ipv4 flush route
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.4
+    - scored
+  when: debian12cis_rules_3_3_4
 # 3.3.10 Ensure tcp syn cookies is enabled
 # Attackers use SYN flood attacks to perform a denial of service attacked on a system by
 # sending many SYN packets without completing the three way handshake. This will quickly
@@ -450,51 +495,6 @@
     - 3.3.4
     - scored
   when: debian12cis_rules_3_3_4
-# 3.3.5 Ensure broadcast ICMP requests are ignored
-# Accepting ICMP echo and timestamp requests with broadcast or multicast destinations for
-# your network could be used to trick your host into starting (or participating) in a Smurf
-# attack. A Smurf attack relies on an attacker sending large amounts of ICMP broadcast
-# messages with a spoofed source address. All hosts receiving this message and responding
-# would send echo-reply messages back to the spoofed address, which is probably not
-# routable. If many hosts respond to the packets, the amount of traffic on the network could
-# be significantly multiplied.
-- name: 3.3.5 Ensure broadcast ICMP requests are ignored
-  block:
-    - name: 3.3.5 Ensure broadcast ICMP requests are ignored - ipv4
-      sysctl:
-        name: net.ipv4.icmp_echo_ignore_broadcasts
-        value: "1"
-        sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-        state: present
-        reload: true
-      notify:
-        - ipv4 flush route
-  tags:
-    - section3
-    - level_1_server
-    - level_1_workstation
-    - 3.3.5
-    - scored
-  when: debian12cis_rules_3_3_5
-# 3.3.6 Ensure bogus ICMP responses are ignored
-# Some routers (and some attackers) will send responses that violate RFC-1122 and attempt
-# to fill up a log file system with many useless error messages.
-- name: 3.3.6 Ensure bogus ICMP responses are ignored
-  sysctl:
-    name: net.ipv4.icmp_ignore_bogus_error_responses
-    value: "1"
-    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-    state: present
-    reload:
-  tags:
-    - section3
-    - level_1_server
-    - level_1_workstation
-    - 3.3.6
-    - scored
-  when: enable_firewall and
-        firewall_type == "nftables" and
-        debian12cis_rules_3_3_6
 # 3.3.7 Ensure Reverse Path Filtering is enabled
 # Setting these flags is a good way to deter attackers from sending your system bogus
 # packets that cannot be responded to. One instance where this feature breaks down is if
