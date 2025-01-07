@@ -131,7 +131,41 @@
     - 4.2.1
     - scored
   when: debian12cis_rules_4_2_1
-# 4.2.1 Ensure iptables are flushed
+# 4.2.2 Ensure ufw is uninstalled or disabled with nftables
+# Uncomplicated Firewall (UFW) is a program for managing a netfilter firewall designed to be easy to use.
+# Running both the nftables service and ufw may lead to conflict and unexpected results.
+- name: 4.2.2 Ensure ufw is uninstalled or disabled with nftables
+  apt:
+    name: ufw
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section4
+    - level_2_server
+    - level_2_workstation
+    - 4.2.2
+    - scored
+  when: debian12cis_rules_4_2_2
+# 4.2.4 Ensure a nftables table exists
+# Tables hold chains. Each table only has one address family and only applies to packets of this family. *
+# Tables can have one of five families.
+# nftables doesn't have any default tables.
+# Without a table being build, nftables will not filter network traffic.
+- name: 4.2.4 Ensure a nftables table exists
+  block:
+    - name: 4.2.4 Ensure a table exists - flush existing table
+      shell: nft flush ruleset
+    - name: 4.2.4 Ensure a table exists - create new table
+      shell: nft create table inet filter
+  tags:
+    - section4
+    - level_2_server
+    - level_2_workstation
+    - 4.2.4
+    - scored
+  when: debian12cis_rules_4_2_4
+# 4.3.1 Ensure iptables are flushed
 # nftables is a replacement for iptables, ip6tables, ebtables and arptables
 - name: 4.2.1 Ensure iptables are flushed
   block:
@@ -149,24 +183,6 @@
     - 4.2.1
     - not-scored
   when: debian12cis_rules_4_2_1
-# 4.5.3.2 Ensure a table exists
-# Tables hold chains. Each table only has one address family and only applies to packets of
-# this family. Tables can have one of five families.
-- name: 4.5.3.2  Ensure a table exists
-  block:
-    - name: 4.5.3.2 Ensure a table exists - flush existing table
-      shell: nft flush ruleset
-    - name: 4.5.3.2 Ensure a table exists - create new table
-      shell: nft create table inet filter
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.5.3.2
-    - scored
-  when: debian12cis_rules_4_5_3_2 and
-        enable_firewall and
-        firewall_type == "nftables"
 # 4.5.3.3 Ensure base chains exist
 # Chains are containers for rules. They exist in two kinds, base chains and regular chains. A
 # base chain is an entry point for packets from the networking stack, a regular chain may be
