@@ -367,6 +367,82 @@
     - 3.3.6
     - scored
   when: debian12cis_rules_3_3_6
+# 3.3.7 Ensure Reverse Path Filtering is enabled
+# Setting these flags is a good way to deter attackers from sending your system bogus
+# packets that cannot be responded to. One instance where this feature breaks down is if
+# asymmetrical routing is employed. This would occur when using dynamic routing protocols
+# (bgp, ospf, etc) on your system. If you are using asymmetrical routing on your system, you
+# will not be able to enable this feature without breaking the routing.
+- name: 3.3.7 Ensure Reverse Path Filtering is enabled
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
+    sysctl_set: true
+    state: present
+    reload: true
+  with_items:
+    - { name: net.ipv4.conf.all.rp_filter, value: 1 }
+    - { name: net.ipv4.conf.default.rp_filter, value: 1 }
+  notify:
+        - ipv4 flush route
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.7
+    - scored
+  when: debian12cis_rules_3_3_7
+# 3.3.8 Ensure source routed packets are not accepted
+# Setting net.ipv4.conf.all.accept_source_route,
+# net.ipv4.conf.default.accept_source_route,
+# net.ipv6.conf.all.accept_source_route and
+# net.ipv6.conf.default.accept_source_route to 0 disables the system from accepting
+# source routed packets. Assume this system was capable of routing packets to Internet
+# routable addresses on one interface and private addresses on another interface. Assume
+# that the private addresses were not routable to the Internet routable addresses and vice
+# versa. Under normal routing circumstances, an attacker from the Internet routable
+# addresses could not use the system as a way to reach the private address systems. If,
+# however, source routed packets were allowed, they could be used to gain access to the
+# private address systems as the route could be specified, rather than rely on routing
+# protocols that did not allow this routing.
+- name: 3.3.8 Ensure source routed packets are not accepted
+  block:
+    - name: 3.3.8 Ensure source routed packets are not accepted - ipv4
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+        - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+      notify:
+        - ipv4 flush route
+    - name: 3.3.8 Ensure source routed packets are not accepted - ipv6
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
+        - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
+      notify:
+        - ipv6 flush route
+      when:
+        - IPv6_is_enabled
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.8
+    - scored
+  when: debian12cis_rules_3_3_8
 # 3.3.10 Ensure tcp syn cookies is enabled
 # Attackers use SYN flood attacks to perform a denial of service attacked on a system by
 # sending many SYN packets without completing the three way handshake. This will quickly
@@ -414,57 +490,6 @@
     - scored
   when: IPv6_is_enabled and
         debian12cis_rules_3_3_11
-# 3.3 Network Parameters (Host and Router)
-# 3.3.1 Ensure source routed packets are not accepted
-# Setting net.ipv4.conf.all.accept_source_route,
-# net.ipv4.conf.default.accept_source_route,
-# net.ipv6.conf.all.accept_source_route and
-# net.ipv6.conf.default.accept_source_route to 0 disables the system from accepting
-# source routed packets. Assume this system was capable of routing packets to Internet
-# routable addresses on one interface and private addresses on another interface. Assume
-# that the private addresses were not routable to the Internet routable addresses and vice
-# versa. Under normal routing circumstances, an attacker from the Internet routable
-# addresses could not use the system as a way to reach the private address systems. If,
-# however, source routed packets were allowed, they could be used to gain access to the
-# private address systems as the route could be specified, rather than rely on routing
-# protocols that did not allow this routing.
-- name: 3.3.1 Ensure source routed packets are not accepted
-  block:
-    - name: 3.3.1 Ensure source routed packets are not accepted - ipv4
-      sysctl:
-        name: "{{ item.name }}"
-        value: "{{ item.value }}"
-        sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-        sysctl_set: true
-        state: present
-        reload: true
-      with_items:
-        - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
-        - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
-      notify:
-        - ipv4 flush route
-    - name: 3.3.1 Ensure source routed packets are not accepted - ipv6
-      sysctl:
-        name: "{{ item.name }}"
-        value: "{{ item.value }}"
-        sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-        sysctl_set: true
-        state: present
-        reload: true
-      with_items:
-        - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
-        - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
-      notify:
-        - ipv6 flush route
-      when:
-        - IPv6_is_enabled
-  tags:
-    - section3
-    - level_1_server
-    - level_1_workstation
-    - 3.3.1
-    - scored
-  when: debian12cis_rules_3_3_1
 # 3.3.4 Ensure suspicious packets are logged
 # Enabling this feature and logging these packets allows an administrator to investigate the
 # possibility that an attacker is sending spoofed packets to their system.
@@ -490,32 +515,6 @@
     - 3.3.4
     - scored
   when: debian12cis_rules_3_3_4
-# 3.3.7 Ensure Reverse Path Filtering is enabled
-# Setting these flags is a good way to deter attackers from sending your system bogus
-# packets that cannot be responded to. One instance where this feature breaks down is if
-# asymmetrical routing is employed. This would occur when using dynamic routing protocols
-# (bgp, ospf, etc) on your system. If you are using asymmetrical routing on your system, you
-# will not be able to enable this feature without breaking the routing.
-- name: 3.3.7 Ensure Reverse Path Filtering is enabled
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    sysctl_file: /etc/sysctl.d/CIS-sysctl.conf
-    sysctl_set: true
-    state: present
-    reload: true
-  with_items:
-    - { name: net.ipv4.conf.all.rp_filter, value: 1 }
-    - { name: net.ipv4.conf.default.rp_filter, value: 1 }
-  notify:
-        - ipv4 flush route
-  tags:
-    - section3
-    - level_1_server
-    - level_1_workstation
-    - 3.3.7
-    - scored
-  when: debian12cis_rules_3_3_7
 # 3.4 Uncommon Network Protocols
 # 3.4.2 Ensure SCTP is disabled
 # The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to
