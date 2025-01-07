@@ -16,6 +16,22 @@
     - 4.1.1
     - scored
   when: debian12cis_rules_4_1_1
+# 4.1.2 Ensure iptables-persistent is not installed with ufw
+# The iptables-persistent is a boot-time loader for netfilter rules, iptables plugin
+# Running both ufw and the services included in the iptables-persistent package may lead to conflict
+- name: 4.1.2 Ensure iptables-persistent is not installed with ufw
+  apt:
+    name: ufw
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section4
+    - level_2_server
+    - level_2_workstation
+    - 4.1.2
+    - scored
+  when: debian12cis_rules_4_1_2
 # 4.1.1 Ensure auditing is enabled
 # 4.1.1.1 Ensure auditd is installed
 # The capturing of system events provides system administrators with information to allow
