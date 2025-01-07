@@ -1,6 +1,18 @@
 ---
 # 4 Host based firewall
-# 4.1 Configure System Accounting (auditd)
+# 4.1 Configure UncomplicatedFirewall (auditd)
+- name: 4.1.1 Ensure ufw is installed
+  apt:
+    name: ufw
+    state: present
+    install_recommends: false
+  tags:
+    - section4
+    - level_2_server
+    - level_2_workstation
+    - 4.1.1
+    - scored
+  when: debian12cis_rules_4_1_1
 # 4.1.1 Ensure auditing is enabled
 # 4.1.1.1 Ensure auditd is installed
 # The capturing of system events provides system administrators with information to allow
