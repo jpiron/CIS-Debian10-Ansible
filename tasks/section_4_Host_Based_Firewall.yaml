@@ -1,6 +1,9 @@
 ---
 # 4 Host based firewall
 # 4.1 Configure UncomplicatedFirewall (auditd)
+# 4.1.1 Ensure ufw is installed
+# The Uncomplicated Firewall (ufw) is a frontend for iptables and is particularly well-suited for host-based firewalls. ufw provides a framework for managing netfilter, as well as a command-line interface for manipulating the firewall
+# A firewall utility is required to configure the Linux kernel's netfilter framework via the iptables or nftables back-end.
 - name: 4.1.1 Ensure ufw is installed
   apt:
     name: ufw
