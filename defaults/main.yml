@@ -7,15 +7,15 @@ IPv6_is_enabled: no
 enable_firewall: yes
 firewall_type: nftables # Valid values are: ufw, nftables, iptables
 # ufw example
-#list_of_rules_to_allow:
-#  - { desc: "ssh", rule: "allow", port: "22", proto: "tcp" }
+list_of_ufw_rules_to_allow:
+  - { desc: "ssh", rule: "allow", port: "22", proto: "tcp" }
 # nftables example
-list_of_rules_to_allow:
+list_of_nftables_rules_to_allow:
   - { desc: "ssh", rule: "tcp dport ssh accept" }
   - { desc: "ping", rule: "ip protocol icmp accept" }
 # iptables example
-#list_of_rules_to_allow:
-#  - { desc: "ssh", port: "22", proto: "tcp" }
+list_of_iptables_rules_to_allow:
+  - { desc: "ssh", port: "22", proto: "tcp" }
 
 # Section 6 Settings
 grub_backlog_limit: 8192

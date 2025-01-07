@@ -81,6 +81,39 @@
     - 4.1.4
     - scored
   when: debian12cis_rules_4_1_4
+# 4.1.6 Ensure ufw firewall rules exist for all open ports
+# Without a firewall rule configured for open ports default firewall policy will drop all
+# packets to these ports.
+- name: 4.1.6 Ensure ufw firewall rules exist for all open ports - enable "{{ item.desc }}"
+  ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  with_items: "{{ list_of_ufw_rules_to_allow | default([]) }}"
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.1.6
+    - scored
+  when: debian12cis_rules_4_1_6
+# 4.1.7 Ensure ufw default deny firewall policy
+# A default deny policy on connections ensures that any unconfigured network usage will be
+# rejected.
+# With a default accept policy the firewall will accept any packet that is not configured to be
+# denied. It is easier to white list acceptable usage than to black list unacceptable usage.
+- name: 4.1.7 Ensure ufw default deny firewall policy
+  shell: |
+    ufw default deny incoming
+    ufw default allow outgoing
+    ufw default deny routed
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.1.7
+    - scored
+  when: debian12cis_rules_4_1_7
 # 4.1.1 Ensure auditing is enabled
 # 4.1.1.1 Ensure auditd is installed
 # The capturing of system events provides system administrators with information to allow
@@ -729,27 +762,6 @@
     - "4.4"
     - scored
   when: debian12cis_rules_4_4
-
-# 4.5.2.2 Ensure default deny firewall policy
-# A default deny policy on connections ensures that any unconfigured network usage will be
-# rejected.
-# With a default accept policy the firewall will accept any packet that is not configured to be
-# denied. It is easier to white list acceptable usage than to black list unacceptable usage.
-- name: 4.5.2.2 Ensure default deny firewall policy
-  shell: |
-    ufw default deny incoming
-    ufw default allow outgoing
-    ufw default deny routed
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.5.2.2
-    - scored
-  when: debian12cis_rules_4_5_2_2 and
-        enable_firewall and
-        firewall_type == "ufw"
-
 # 4.5.2.4 Ensure outbound connections are configured
 # If rules are not in place for new outbound connections all packets will be dropped by the
 # default policy preventing network usage.
@@ -763,24 +775,6 @@
     - 4.5.2.4
     - not-scored
   when: debian12cis_rules_4_5_2_4 and
-        enable_firewall and
-        firewall_type == "ufw"
-# 4.5.2.5 Ensure firewall rules exist for all open ports
-# Without a firewall rule configured for open ports default firewall policy will drop all
-# packets to these ports.
-- name: 4.5.2.5 Ensure firewall rules exist for all open ports - enable "{{ item.desc }}"
-  ufw:
-    rule: "{{ item.rule }}"
-    port: "{{ item.port }}"
-    proto: "{{ item.proto }}"
-  with_items: "{{ list_of_rules_to_allow | default([]) }}"
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.5.2.5
-    - scored
-  when: debian12cis_rules_4_5_2_5 and
         enable_firewall and
         firewall_type == "ufw"
 # 4.5.3 Configure nftables
