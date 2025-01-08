@@ -92,6 +92,34 @@
     - 5.1.4
     - scored
   when: debian12cis_rules_5_1_4
+# 5.1.5 Ensure sshd banner is configured
+# The Banner parameter specifies a file whose contents must be sent to the remote user before authentication is permitted.
+# By default, no banner is displayed.
+# Banners are used to warn connecting users of the particular site's policy regarding
+# connection. Presenting a warning message prior to the normal user login may assist the
+# prosecution of trespassers on the computer system.
+- name: 5.1.5 Ensure sshd banner is configured
+  block:
+    - name: 5.1.5 Ensure sshd banner is configured - copy banner
+      copy:
+        src: banner
+        dest: /etc/ssh/banner
+        owner: root
+        group: root
+        mode: '0644'
+    - name: 5.1.5 Ensure sshd banner is configured - config banner
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^Banner"
+        line: "Banner /etc/ssh/banner"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.5
+    - scored
+  when: debian12cis_rules_5_1_5
 # 5.1.10 Ensure sshd HostbasedAuthentication is disabled
 # The HostbasedAuthentication parameter specifies if authentication is allowed through trusted hosts via the user of .rhosts , or /etc/hosts.equiv , along with successful public key client host authentication.
 # Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf , disabling the ability to use .rhosts files in SSH provides an additional layer of protection.
@@ -445,32 +473,6 @@
     - 5.2.18
     - scored
   when: debian12cis_rules_5_2_18
-# 5.2.19 Ensure SSH warning banner is configured
-# Banners are used to warn connecting users of the particular site's policy regarding
-# connection. Presenting a warning message prior to the normal user login may assist the
-# prosecution of trespassers on the computer system.
-- name: 5.2.19 Ensure SSH warning banner is configured
-  block:
-    - name: 5.2.19 Ensure SSH warning banner is configured - copy banner
-      copy:
-        src: banner
-        dest: /etc/ssh/banner
-        owner: root
-        group: root
-        mode: '0644'
-    - name: 5.2.19 Ensure SSH warning banner is configured - config banner
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^Banner"
-        line: "Banner /etc/ssh/banner"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.2.19
-    - scored
-  when: debian12cis_rules_5_2_19
 # 5.2.21 Ensure SSH AllowTcpForwarding is disabled
 # Leaving port forwarding enabled can expose the organization to security risks and back-
 # doors.
