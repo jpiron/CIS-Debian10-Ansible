@@ -34,6 +34,22 @@
     - 5.1.10
     - scored
   when: debian12cis_rules_5_1_10
+# 5.1.11 Ensure sshd IgnoreRhosts is enabled
+# The IgnoreRhosts parameter specifies that .rhosts and .shosts files will not be used in RhostsRSAAuthentication or HostbasedAuthentication.
+# Setting this parameter forces users to enter a password when authenticating with SSH.
+- name: 5.1.11 Ensure sshd IgnoreRhosts is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?IgnoreRhosts"
+    line: "IgnoreRhosts no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.11
+    - scored
+  when: debian12cis_rules_5_1_11
 # 5.1.20 Ensure sshd PermitRootLogin is disabled
 # Disallowing root logins over SSH requires system admins to authenticate using their own
 # individual account, then escalating to root via sudo or su . This in turn limits opportunity for
