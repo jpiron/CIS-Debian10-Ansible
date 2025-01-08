@@ -23,7 +23,7 @@
 # Running both ufw and the services included in the iptables-persistent package may lead to conflict
 - name: 4.1.2 Ensure iptables-persistent is not installed with ufw
   apt:
-    name: iptables-persistent
+    name: ["iptables", "iptables-persistent"]
     state: absent
     purge: true
     autoremove: true
@@ -290,6 +290,26 @@
   when: debian12cis_rules_4_2_10 and
         enable_firewall and
         firewall_type == "nftables"
+# 4.3 Configure iptables
+# 4.3.1 Configure iptables software
+# 4.3.1.1 Ensure iptables packages are installed
+# iptables is a utility program that allows a system administrator to configure the tables provided by the Linux kernel firewall, implemented as different Netfilter modules, and the chains and rules it stores.
+# Different kernel modules and programs are used for different protocols; iptables applies to IPv4, ip6tables to IPv6, arptables to ARP, and ebtables to Ethernet frames.
+# A method of configuring and maintaining firewall rules is necessary to configure a Host Based Firewall.
+- name: 4.3.1.1 Ensure iptables is installed
+  apt:
+    name: ["iptables", "iptables-persistent"]
+    state: present
+    install_recommends: false
+  tags:
+    - section4
+    - level_2_server
+    - level_2_workstation
+    - 4.3.1.1
+    - scored
+  when: debian12cis_rules_4_3_1_1 and
+        enable_firewall and
+        firewall_type == "iptables"
 # 4.5.3.5 Ensure outbound and established connections are configured
 # Configure the firewall rules for new outbound, and established connections
 - name: 4.5.3.5 Ensure outbound and established connections are configured
