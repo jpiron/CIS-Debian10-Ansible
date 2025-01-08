@@ -310,6 +310,24 @@
   when: debian12cis_rules_4_3_1_1 and
         enable_firewall and
         firewall_type == "iptables"
+# 4.3.1.2 Ensure nftables is not installed with iptables
+# nftables is a subsystem of the Linux kernel providing filtering and classification of network packets/datagrams/frames and is the successor to iptables.
+# Running both iptables and nftables may lead to conflict.
+- name: 4.3.1.2 Ensure nftables is not installed with iptables
+  apt:
+    name: nftables
+    state: absent
+    purge: true
+    autoremove: true
+  tags:
+    - section4
+    - level_2_server
+    - level_2_workstation
+    - 4.3.1.2
+    - scored
+  when: debian12cis_rules_4_3_1_2 and
+        enable_firewall and
+        firewall_type == "iptables"
 # 4.5.3.5 Ensure outbound and established connections are configured
 # Configure the firewall rules for new outbound, and established connections
 - name: 4.5.3.5 Ensure outbound and established connections are configured
