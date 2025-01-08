@@ -184,7 +184,7 @@
   when: debian12cis_rules_4_2_4 and
         enable_firewall and
         firewall_type == "nftables"
-# 4.2.5 Ensure base chains exist
+# 4.2.5 Ensure nftables base chains exist
 # Chains are containers for rules. They exist in two kinds, base chains and regular chains. A
 # base chain is an entry point for packets from the networking stack, a regular chain may be
 # used as jump target and is used for better rule organization.
@@ -224,6 +224,50 @@
     - 4.2.6
     - scored
   when: debian12cis_rules_4_2_6 and
+        enable_firewall and
+        firewall_type == "nftables"
+#  4.2.8 Ensure nftables default deny firewall policy
+# Base chain policy is the default verdict that will be applied to packets reaching the end of
+# the chain.
+- name: 4.2.8 Ensure nftables default deny firewall policy
+  block:
+    # - name: 4.2.8 Ensure nftables default deny firewall policy - enable ssh
+    #   shell: nft chain inet filter INPUT { tcp dport ssh accept \;}
+    # - name: 4.2.8 Ensure nftables default deny firewall policy - enable ping
+    #   shell: nft chain inet filter INPUT { ip protocol icmp accept \;}
+    - name: 4.2.8 Ensure nftables default deny firewall policy - enable "{{ item.desc }}"
+      shell: nft add rule inet filter INPUT "{{ item.rule }}"
+      with_items: "{{ list_of_rules_to_allow | default([]) }}"
+    - name: 4.2.8 Ensure nftables default deny firewall policy - input
+      shell: nft chain inet filter INPUT { policy drop \; }
+    - name: 4.2.8 Ensure nftables default deny firewall policy - forward
+      shell: nft chain inet filter FORWARD { policy drop \; }
+    - name: 4.2.8 Ensure nftables default deny firewall policy - output
+      shell: nft chain inet filter OUTPUT { policy drop \; }
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.8
+    - scored
+  when: debian12cis_rules_4_2_8 and
+        enable_firewall and
+        firewall_type == "nftables"
+# 4.2.9 Ensure nftables service is enabled
+# The nftables service allows for the loading of nftables rulesets during boot, or starting
+# on the nftables service
+- name: 4.2.9 Ensure nftables service is enabled
+  service:
+    name: nftables
+    state: started
+    enabled: true
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.9
+    - scored
+  when: debian12cis_rules_4_2_9 and
         enable_firewall and
         firewall_type == "nftables"
 # 4.2.10 Ensure nftables rules are permanent
@@ -269,50 +313,6 @@
     - 4.5.3.5
     - not-scored
   when: debian12cis_rules_4_5_3_5 and
-        enable_firewall and
-        firewall_type == "nftables"
-#  4.5.3.6 Ensure default deny firewall policy
-# Base chain policy is the default verdict that will be applied to packets reaching the end of
-# the chain.
-- name: 4.5.3.6 Ensure default deny firewall policy
-  block:
-    # - name: 4.5.3.6 Ensure default deny firewall policy - enable ssh
-    #   shell: nft chain inet filter INPUT { tcp dport ssh accept \;}
-    # - name: 4.5.3.6 Ensure default deny firewall policy - enable ping
-    #   shell: nft chain inet filter INPUT { ip protocol icmp accept \;}
-    - name: 4.5.3.6 Ensure default deny firewall policy - enable "{{ item.desc }}"
-      shell: nft add rule inet filter INPUT "{{ item.rule }}"
-      with_items: "{{ list_of_rules_to_allow | default([]) }}"
-    - name: 4.5.3.6 Ensure default deny firewall policy - input
-      shell: nft chain inet filter INPUT { policy drop \; }
-    - name: 4.5.3.6 Ensure default deny firewall policy - forward
-      shell: nft chain inet filter FORWARD { policy drop \; }
-    - name: 4.5.3.6 Ensure default deny firewall policy - output
-      shell: nft chain inet filter OUTPUT { policy drop \; }
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.5.3.6
-    - scored
-  when: debian12cis_rules_4_5_3_6 and
-        enable_firewall and
-        firewall_type == "nftables"
-# 4.5.3.7 Ensure nftables service is enabled
-# The nftables service allows for the loading of nftables rulesets during boot, or starting
-# on the nftables service
-- name: 4.5.3.7 Ensure nftables service is enabled
-  service:
-    name: nftables
-    state: started
-    enabled: true
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.5.3.7
-    - scored
-  when: debian12cis_rules_4_5_3_7 and
         enable_firewall and
         firewall_type == "nftables"
 # 4.5.4 Configure iptables
