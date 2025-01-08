@@ -69,6 +69,23 @@
     - 5.1.12
     - scored
   when: debian12cis_rules_5_1_12
+# 5.1.13 Ensure sshd LoginGraceTime is configured
+# The LoginGraceTime parameter specifies the time allowed for successful authentication to the SSH server.
+# The longer the Grace period is the more open unauthenticated connections can exist.
+# Like other session controls in this session the Grace Period should be limited to appropriate organizational limits to ensure the service is available for needed access.
+- name: 5.1.13 Ensure sshd LoginGraceTime is configured
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?LoginGraceTime"
+    line: "LoginGraceTime 60"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.13
+    - scored
+  when: debian12cis_rules_5_1_13
 # 5.1.20 Ensure sshd PermitRootLogin is disabled
 # Disallowing root logins over SSH requires system admins to authenticate using their own
 # individual account, then escalating to root via sudo or su . This in turn limits opportunity for
