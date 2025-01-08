@@ -18,6 +18,22 @@
     - 5.1.1
     - scored
   when: debian12cis_rules_5_1_1
+# 5.1.10 Ensure sshd HostbasedAuthentication is disabled
+# The HostbasedAuthentication parameter specifies if authentication is allowed through trusted hosts via the user of .rhosts , or /etc/hosts.equiv , along with successful public key client host authentication.
+# Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf , disabling the ability to use .rhosts files in SSH provides an additional layer of protection.
+- name: 5.1.10 Ensure sshd HostbasedAuthentication is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?HostbasedAuthentication"
+    line: "HostbasedAuthentication no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.10
+    - scored
+  when: debian12cis_rules_5_1_10
 # 5.1.20 Ensure sshd PermitRootLogin is disabled
 # Disallowing root logins over SSH requires system admins to authenticate using their own
 # individual account, then escalating to root via sudo or su . This in turn limits opportunity for
