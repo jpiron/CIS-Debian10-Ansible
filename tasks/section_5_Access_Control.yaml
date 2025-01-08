@@ -1,10 +1,10 @@
 ---
 # 5 Access control
-# 5.2 Configure SSH Server
-# 5.2.1 Ensure permissions on /etc/ssh/sshd_config are configured
+# 5.1 Configure SSH Server
+# 5.1.1 Ensure permissions on /etc/ssh/sshd_config are configured
 # The /etc/ssh/sshd_config file needs to be protected from unauthorized changes by non-
 # privileged users.
-- name: 5.2.1 Ensure permissions on /etc/ssh/sshd_config are configured
+- name: 5.1.1 Ensure permissions on /etc/ssh/sshd_config are configured
   file:
     dest: /etc/ssh/sshd_config
     state: file
@@ -15,9 +15,26 @@
     - section5
     - level_1_server
     - level_1_workstation
-    - 5.2.1
+    - 5.1.1
     - scored
-  when: debian12cis_rules_5_2_1
+  when: debian12cis_rules_5_1_1
+# 5.1.20 Ensure sshd PermitRootLogin is disabled
+# Disallowing root logins over SSH requires system admins to authenticate using their own
+# individual account, then escalating to root via sudo or su . This in turn limits opportunity for
+# non-repudiation and provides a clear audit trail in the event of a security incident
+- name: 5.1.20 Ensure sshd PermitRootLogin is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?PermitRootLogin"
+    line: "PermitRootLogin no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.20
+    - scored
+  when: debian12cis_rules_5_1_20
 # 5.2.2 Ensure sudo commands use pty
 # sudo can be configured to run only from a pseudo-pty
 - name: 5.2.2 Ensure sudo commands use pty
@@ -203,23 +220,6 @@
     - 5.2.9
     - scored
   when: debian12cis_rules_5_2_9
-# 5.2.10 Ensure SSH root login is disabled
-# Disallowing root logins over SSH requires system admins to authenticate using their own
-# individual account, then escalating to root via sudo or su . This in turn limits opportunity for
-# non-repudiation and provides a clear audit trail in the event of a security incident
-- name: 5.2.10 Ensure SSH root login is disabled
-  lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^(#)?PermitRootLogin"
-    line: "PermitRootLogin no"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.2.10
-    - scored
-  when: debian12cis_rules_5_2_10
 # 5.2.11 Ensure SSH PermitEmptyPasswords is disabled
 # Disallowing remote shell access to accounts that have an empty password reduces the
 # probability of unauthorized access to the system
