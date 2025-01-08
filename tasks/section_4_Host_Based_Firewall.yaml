@@ -417,6 +417,26 @@
   when: debian12cis_rules_4_3_2_2 and
         enable_firewall and
         firewall_type == "iptables"
+# 4.3.3.1 Ensure ip6tables default deny firewall policy
+# With a default accept policy the firewall will accept any packet that is not configured to be
+# denied. It is easier to white list acceptable usage than to black list unacceptable usage.
+- name: 4.3.3.1 Ensure ip6tables default deny firewall policy
+  iptables:
+    chain: "{{ item }}"
+    policy: DROP
+  with_items:
+    - INPUT
+    - FORWARD
+    - OUTPUT
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.3.3.1
+    - scored
+  when: debian12cis_rules_4_3_3_1 and
+        enable_firewall and
+        firewall_type == "ip6tables"
 # 4.5.3.5 Ensure outbound and established connections are configured
 # Configure the firewall rules for new outbound, and established connections
 - name: 4.5.3.5 Ensure outbound and established connections are configured
