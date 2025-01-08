@@ -185,6 +185,23 @@
     - 5.1.20
     - scored
   when: debian12cis_rules_5_1_20
+# 5.1.21 Ensure sshd PermitUserEnvironment is disabled
+# Permitting users the ability to set environment variables through the SSH daemon could
+# potentially allow users to bypass security controls (e.g. setting an execution path that has
+# ssh executing trojan'd programs)
+- name: 5.1.21 Ensure sshd PermitUserEnvironment is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?PermitUserEnvironment"
+    line: "PermitUserEnvironment no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.21
+    - scored
+  when: debian12cis_rules_5_1_21
 # 5.2.2 Ensure sudo commands use pty
 # sudo can be configured to run only from a pseudo-pty
 - name: 5.2.2 Ensure sudo commands use pty
@@ -305,24 +322,6 @@
     - 5.2.6
     - scored
   when: debian12cis_rules_5_2_6
-
-# 5.2.12 Ensure SSH PermitUserEnvironment is disabled
-# Permitting users the ability to set environment variables through the SSH daemon could
-# potentially allow users to bypass security controls (e.g. setting an execution path that has
-# ssh executing trojan'd programs)
-- name: 5.2.12 Ensure SSH PermitUserEnvironment is disabled
-  lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^(#)?PermitUserEnvironment"
-    line: "PermitUserEnvironment no"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.2.12
-    - scored
-  when: debian12cis_rules_5_2_12
 # 5.2.13 Ensure only strong Ciphers are used
 # Weak ciphers that are used for authentication to the cryptographic module cannot be relied
 # upon to provide confidentiality or integrity, and system data may be compromised
