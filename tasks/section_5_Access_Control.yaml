@@ -102,6 +102,22 @@
     - 5.1.15
     - scored
   when: debian12cis_rules_5_1_15
+# 5.1.16 Ensure sshd MaxAuthTries is configured
+# The MaxAuthTries parameter specifies the maximum number of authentication attempts permitted per connection. When the login failure count reaches half the number, error messages will be written to the syslog file detailing the login failure.
+# Setting the MaxAuthTries parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. While the recommended setting is 4, set the number based on site policy.
+- name: 5.1.16 Ensure sshd MaxAuthTries is configured
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?MaxAuthTries"
+    line: "MaxAuthTries 4"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.16
+    - scored
+  when: debian12cis_rules_5_1_16
 # 5.1.20 Ensure sshd PermitRootLogin is disabled
 # Disallowing root logins over SSH requires system admins to authenticate using their own
 # individual account, then escalating to root via sudo or su . This in turn limits opportunity for
