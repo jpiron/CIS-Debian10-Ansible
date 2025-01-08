@@ -120,6 +120,47 @@
     - 5.1.5
     - scored
   when: debian12cis_rules_5_1_5
+# 5.1.6 Ensure sshd Ciphers are configured
+# Weak ciphers that are used for authentication to the cryptographic module cannot be relied
+# upon to provide confidentiality or integrity, and system data may be compromised
+- name: 5.1.6 Ensure sshd Ciphers are configured
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^Ciphers"
+    line: "Ciphers -3des-cbc,aes128-cbc,aes192-cbc,aes256-cbc,chacha20-poly1305@openssh.com"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.6
+    - scored
+  when: debian12cis_rules_5_1_6
+# 5.1.7 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured
+# Having no timeout value associated with a connection could allow an unauthorized user
+# access to another user's ssh session (e.g. user walks away from their computer and doesn't
+# lock the screen). Setting a timeout value at least reduces the risk of this happening.
+- name: 5.1.7 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured
+  block:
+    - name: 5.1.7 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured - clientalive
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^(#)?ClientAliveInterval"
+        line: "ClientAliveInterval 15"
+    - name: 5.1.7 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured - MaxAlive
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^(#)?ClientAliveCountMax"
+        line: "ClientAliveCountMax 3"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.7
+    - scored
+  when: debian12cis_rules_5_1_7
 # 5.1.10 Ensure sshd HostbasedAuthentication is disabled
 # The HostbasedAuthentication parameter specifies if authentication is allowed through trusted hosts via the user of .rhosts , or /etc/hosts.equiv , along with successful public key client host authentication.
 # Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf , disabling the ability to use .rhosts files in SSH provides an additional layer of protection.
@@ -388,47 +429,6 @@
     - 5.2.6
     - scored
   when: debian12cis_rules_5_2_6
-# 5.2.13 Ensure only strong Ciphers are used
-# Weak ciphers that are used for authentication to the cryptographic module cannot be relied
-# upon to provide confidentiality or integrity, and system data may be compromised
-- name: 5.2.13 Ensure only strong Ciphers are used
-  lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^Ciphers"
-    line: "Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.2.13
-    - scored
-  when: debian12cis_rules_5_2_13
-# 5.2.16 Ensure SSH Idle Timeout Interval is configured
-# Having no timeout value associated with a connection could allow an unauthorized user
-# access to another user's ssh session (e.g. user walks away from their computer and doesn't
-# lock the screen). Setting a timeout value at least reduces the risk of this happening.
-- name: 5.2.16 Ensure SSH Idle Timeout Interval is configured
-  block:
-    - name: 5.2.16 Ensure SSH Idle Timeout Interval is configured - clientalive
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^(#)?ClientAliveInterval"
-        line: "ClientAliveInterval 300"
-    - name: 5.2.16 Ensure SSH Idle Timeout Interval is configured - MaxAlive
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^(#)?ClientAliveCountMax"
-        line: "ClientAliveCountMax 3"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.2.16
-    - scored
-  when: debian12cis_rules_5_2_16
 # 5.2.18 Ensure SSH access is limited
 # Restricting which users can remotely access the system via SSH will help ensure that only
 # authorized users access the system.
