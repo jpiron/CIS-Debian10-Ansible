@@ -437,6 +437,37 @@
   when: debian12cis_rules_4_3_3_1 and
         enable_firewall and
         firewall_type == "ip6tables"
+# 4.3.3.2 Ensure ip6tables loopback traffic is configured
+# Loopback traffic is generated between processes on machine and is typically critical to
+# operation of the system. The loopback interface is the only place that loopback network
+# (127.0.0.0/8) traffic should be seen, all other interfaces should ignore traffic on this
+# network as an anti-spoofing measure.
+- name: 4.3.3.2 Ensure ip6tables loopback traffic is configured
+  block:
+    - name: 4.3.3.2 Ensure ip6tables loopback traffic is configured - INPUT lo
+      iptables:
+        chain: INPUT
+        in_interface: "lo"
+        jump: ACCEPT
+    - name: 4.3.3.2 Ensure ip6tables loopback traffic is configured - OUTPUT lo
+      iptables:
+        chain: OUTPUT
+        out_interface: "lo"
+        jump: ACCEPT
+    - name: 4.3.3.2 Ensure ip6tables loopback traffic is configured - INPUT DROP
+      iptables:
+        chain: INPUT
+        source: ::1
+        jump: DROP
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.3.3.2
+    - scored
+  when: debian12cis_rules_4_3_3_2 and
+        enable_firewall and
+        firewall_type == "ip6tables"
 # 4.5.3.5 Ensure outbound and established connections are configured
 # Configure the firewall rules for new outbound, and established connections
 - name: 4.5.3.5 Ensure outbound and established connections are configured
