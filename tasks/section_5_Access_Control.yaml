@@ -202,6 +202,24 @@
     - 5.1.21
     - scored
   when: debian12cis_rules_5_1_21
+# 5.1.22 Ensure sshd PAM is enabled
+# When usePAM is set to yes, PAM runs through account and session types properly. This is
+# important if you want to restrict access to services based off of IP, time or other factors of
+# the account. Additionally, you can make sure users inherit certain environment variables
+# on login or disallow access to the server
+- name: 5.1.22 Ensure SSH PAM is enabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^UsePAM"
+    line: "UsePAM yes"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.22
+    - scored
+  when: debian12cis_rules_5_1_22
 # 5.2.2 Ensure sudo commands use pty
 # sudo can be configured to run only from a pseudo-pty
 - name: 5.2.2 Ensure sudo commands use pty
@@ -433,24 +451,6 @@
     - 5.2.19
     - scored
   when: debian12cis_rules_5_2_19
-# 5.2.20 Ensure SSH PAM is enabled
-# When usePAM is set to yes, PAM runs through account and session types properly. This is
-# important if you want to restrict access to services based off of IP, time or other factors of
-# the account. Additionally, you can make sure users inherit certain environment variables
-# on login or disallow access to the server
-- name: 5.2.20 Ensure SSH PAM is enabled
-  lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^UsePAM"
-    line: "UsePAM yes"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.2.20
-    - scored
-  when: debian12cis_rules_5_2_20
 # 5.2.21 Ensure SSH AllowTcpForwarding is disabled
 # Leaving port forwarding enabled can expose the organization to security risks and back-
 # doors.
