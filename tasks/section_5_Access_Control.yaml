@@ -161,6 +161,23 @@
     - 5.1.7
     - scored
   when: debian12cis_rules_5_1_7
+# 5.1.8 Ensure sshd DisableForwarding is enabled
+# Disable X11 forwarding unless there is an operational requirement to use X11 applications directly.
+# There is a small risk that the remote X11 servers of users who are logged in via SSH with X11 forwarding could be compromised by other users on the X11 server.
+# Note that even if X11 forwarding is disabled, users can always install their own forwarders.
+- name: 5.1.8 Ensure sshd DisableForwarding is enabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?DisableForwarding"
+    line: "DisableForwarding yes"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.8
+    - scored
+  when: debian12cis_rules_5_1_8
 # 5.1.10 Ensure sshd HostbasedAuthentication is disabled
 # The HostbasedAuthentication parameter specifies if authentication is allowed through trusted hosts via the user of .rhosts , or /etc/hosts.equiv , along with successful public key client host authentication.
 # Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf , disabling the ability to use .rhosts files in SSH provides an additional layer of protection.
