@@ -86,23 +86,22 @@
     - 5.1.13
     - scored
   when: debian12cis_rules_5_1_13
-# 5.1.14 Ensure sshd LogLevel is configured
-# SSH provides several logging levels with varying amounts of verbosity.
-# The DEBUG options are specifically not recommended other than strictly for debugging SSH communications.
-# These levels provide so much data that it is difficult to identify important security information, and may violate the privacy of users.
-- name: 5.1.14 Ensure sshd LogLevel is configured
+# 5.1.15 Ensure sshd MACs are configured
+# This variable limits the types of MAC algorithms that SSH can use during communication.
+# MD5 and 96-bit MAC algorithms are considered weak and have been shown to increase exploitability in SSH downgrade attacks. Weak algorithms continue to have a great deal of attention as a weak spot that can be exploited with expanded computing power. An attacker that breaks the algorithm could take advantage of a MiTM position to decrypt the SSH tunnel and capture credentials and information.
+- name: 5.1.15 Ensure sshd MACs are configured
   lineinfile:
     state: present
     dest: /etc/ssh/sshd_config
-    regexp: "^(#)?LogLevel"
-    line: "LogLevel VERBOSE"
+    regexp: "^(#)?MACs"
+    line: "MACs -hmac-md5,hmac-md5-96,hmac-ripemd160,hmac-sha1-96,umac-64@openssh.com,hmac-md5-etm@openssh.com,hmac-md5-96-etm@openssh.com,hmac-ripemd160-etm@openssh.com,hmac-sha1-96-etm@openssh.com,umac-64-etm@openssh.com,umac-128-etm@openssh.com"
   tags:
     - section5
     - level_1_server
     - level_1_workstation
-    - 5.1.14
+    - 5.1.15
     - scored
-  when: debian12cis_rules_5_1_14
+  when: debian12cis_rules_5_1_15
 # 5.1.20 Ensure sshd PermitRootLogin is disabled
 # Disallowing root logins over SSH requires system admins to authenticate using their own
 # individual account, then escalating to root via sudo or su . This in turn limits opportunity for
