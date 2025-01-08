@@ -171,9 +171,9 @@
 # Without a table being build, nftables will not filter network traffic.
 - name: 4.2.4 Ensure a nftables table exists
   block:
-    - name: 4.2.4 Ensure a table exists - flush existing table
+    - name: 4.2.4 Ensure a nftables table exists - flush existing table
       shell: nft flush ruleset
-    - name: 4.2.4 Ensure a table exists - create new table
+    - name: 4.2.4 Ensure a nftables table exists - create new table
       shell: nft create table inet filter
   tags:
     - section4
@@ -188,13 +188,13 @@
 # Chains are containers for rules. They exist in two kinds, base chains and regular chains. A
 # base chain is an entry point for packets from the networking stack, a regular chain may be
 # used as jump target and is used for better rule organization.
-- name: 4.2.5 Ensure base chains exist
+- name: 4.2.5 Ensure nftables base chains exist
   block:
-    - name: 4.2.5 Ensure base chains exist - chain INPUT
+    - name: 4.2.5 Ensure nftables base chains exist - chain INPUT
       shell: nft create chain inet filter INPUT { type filter hook input priority 0 \; }
-    - name: 4.2.5 Ensure base chains exist - chain FORWARD
+    - name: 4.2.5 Ensure nftables base chains exist - chain FORWARD
       shell: nft create chain inet filter FORWARD { type filter hook forward priority 0 \; }
-    - name: 4.2.5 Ensure base chains exist - chain OUTPUT
+    - name: 4.2.5 Ensure nftables base chains exist - chain OUTPUT
       shell: nft create chain inet filter OUTPUT { type filter hook output priority 0 \; }
   tags:
     - section4
@@ -203,6 +203,27 @@
     - 4.2.5
     - scored
   when: debian12cis_rules_4_2_5 and
+        enable_firewall and
+        firewall_type == "nftables"
+# 4.2.6 Ensure nftables loopback traffic is configured
+# Configure the loopback interface to accept traffic. Configure all other interfaces to deny
+# traffic to the loopback network
+- name: 4.2.6 Ensure nftables loopback traffic is configured
+  block:
+    - name: 4.2.6 Ensure nftables loopback traffic is configured - accept
+      shell: nft add rule inet filter INPUT iif lo accept
+    - name: 4.2.6 Ensure nftables loopback traffic is configured - drop
+      shell: nft add rule inet filter INPUT ip saddr 127.0.0.0/8 counter drop
+    - name: 4.2.6 Ensure nftables loopback traffic is configured - ipv6 drop
+      shell: nft add rule inet filter INPUT ip6 saddr ::1 counter drop
+      when: IPv6_is_enabled
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.6
+    - scored
+  when: debian12cis_rules_4_2_6 and
         enable_firewall and
         firewall_type == "nftables"
 # 4.2.10 Ensure nftables rules are permanent
@@ -223,27 +244,6 @@
     - 4.2.10
     - not-scored
   when: debian12cis_rules_4_2_10 and
-        enable_firewall and
-        firewall_type == "nftables"
-# 4.5.3.4 Ensure loopback traffic is configured
-# Configure the loopback interface to accept traffic. Configure all other interfaces to deny
-# traffic to the loopback network
-- name: 4.5.3.4 Ensure loopback traffic is configured
-  block:
-    - name: 4.5.3.4 Ensure loopback traffic is configured - accept
-      shell: nft add rule inet filter INPUT iif lo accept
-    - name: 4.5.3.4 Ensure loopback traffic is configured - drop
-      shell: nft add rule inet filter INPUT ip saddr 127.0.0.0/8 counter drop
-    - name: 4.5.3.4 Ensure loopback traffic is configured - ipv6 drop
-      shell: nft add rule inet filter INPUT ip6 saddr ::1 counter drop
-      when: IPv6_is_enabled
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.5.3.4
-    - scored
-  when: debian12cis_rules_4_5_3_4 and
         enable_firewall and
         firewall_type == "nftables"
 # 4.5.3.5 Ensure outbound and established connections are configured
