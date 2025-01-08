@@ -50,6 +50,25 @@
     - 5.1.11
     - scored
   when: debian12cis_rules_5_1_11
+# 5.1.12 Ensure only strong Key Exchange algorithms are used
+# Key exchange methods that are considered weak should be removed. A key exchange
+# method may be weak because too few bits are used, or the hashing algorithm is considered
+# too weak. Using weak algorithms could expose connections to man-in-the-middle attacks
+# Key exchange methods that are considered weak should be removed.
+# A key exchange method may be weak because too few bits are used, or the hashing algorithm is considered too weak. Using weak algorithms could expose connections to man-in-the-middle attacks
+- name: 5.1.12 Ensure only strong Key Exchange algorithms are used
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^KexAlgorithms"
+    line: "KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.12
+    - scored
+  when: debian12cis_rules_5_1_12
 # 5.1.20 Ensure sshd PermitRootLogin is disabled
 # Disallowing root logins over SSH requires system admins to authenticate using their own
 # individual account, then escalating to root via sudo or su . This in turn limits opportunity for
