@@ -345,6 +345,26 @@
   when: debian12cis_rules_4_3_1_3 and
         enable_firewall and
         firewall_type == "iptables"
+# 4.3.2.1 Ensure iptables default deny firewall policy
+# With a default accept policy the firewall will accept any packet that is not configured to be
+# denied. It is easier to white list acceptable usage than to black list unacceptable usage.
+- name: 4.3.2.1 Ensure iptables default deny firewall policy
+  iptables:
+    chain: "{{ item }}"
+    policy: DROP
+  with_items:
+    - INPUT
+    - FORWARD
+    - OUTPUT
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.3.2.1
+    - scored
+  when: debian12cis_rules_4_3_2_1 and
+        enable_firewall and
+        firewall_type == "iptables"
 # 4.5.3.5 Ensure outbound and established connections are configured
 # Configure the firewall rules for new outbound, and established connections
 - name: 4.5.3.5 Ensure outbound and established connections are configured
@@ -370,28 +390,7 @@
   when: debian12cis_rules_4_5_3_5 and
         enable_firewall and
         firewall_type == "nftables"
-# 4.5.4 Configure iptables
-# 4.5.4.1 Configure IPv4 iptables
-# 4.5.4.1.1 Ensure default deny firewall policy
-# With a default accept policy the firewall will accept any packet that is not configured to be
-# denied. It is easier to white list acceptable usage than to black list unacceptable usage.
-- name: 4.5.4.1.1 Ensure default deny firewall policy
-  iptables:
-    chain: "{{ item }}"
-    policy: DROP
-  with_items:
-    - INPUT
-    - FORWARD
-    - OUTPUT
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.5.4.1.1
-    - scored
-  when: debian12cis_rules_4_5_4_1_1 and
-        enable_firewall and
-        firewall_type == "iptables"
+
 # 4.5.4.1.2 Ensure loopback traffic is configured
 # Loopback traffic is generated between processes on machine and is typically critical to
 # operation of the system. The loopback interface is the only place that loopback network
