@@ -118,6 +118,22 @@
     - 5.1.16
     - scored
   when: debian12cis_rules_5_1_16
+# 5.1.17 Ensure sshd MaxSessions is configured
+# The MaxSessions parameter specifies the maximum number of open sessions permitted from a given connection.
+# To protect a system from denial of service due to a large number of concurrent sessions, use the rate limiting function of MaxSessions to protect availability of sshd logins and prevent overwhelming the daemon.
+- name: 5.1.17 Ensure sshd MaxSessions is configured
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?MaxSessions"
+    line: "MaxSessions 10"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.17
+    - scored
+  when: debian12cis_rules_5_1_17
 # 5.1.20 Ensure sshd PermitRootLogin is disabled
 # Disallowing root logins over SSH requires system admins to authenticate using their own
 # individual account, then escalating to root via sudo or su . This in turn limits opportunity for
