@@ -178,6 +178,22 @@
     - 5.1.8
     - scored
   when: debian12cis_rules_5_1_8
+# 5.1.9 Ensure sshd GSSAPIAuthentication is disabled
+# The GSSAPIAuthentication parameter specifies whether user authentication based on GSSAPI is allowed
+# Allowing GSSAPI authentication through SSH exposes the system's GSSAPI to remote hosts, and should be disabled to reduce the attack surface of the system
+- name: 5.1.9 Ensure sshd GSSAPIAuthentication is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?GSSAPIAuthentication"
+    line: "GSSAPIAuthentication no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.9
+    - scored
+  when: debian12cis_rules_5_1_9
 # 5.1.10 Ensure sshd HostbasedAuthentication is disabled
 # The HostbasedAuthentication parameter specifies if authentication is allowed through trusted hosts via the user of .rhosts , or /etc/hosts.equiv , along with successful public key client host authentication.
 # Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf , disabling the ability to use .rhosts files in SSH provides an additional layer of protection.
