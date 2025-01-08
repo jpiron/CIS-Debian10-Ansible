@@ -18,6 +18,36 @@
     - 5.1.1
     - scored
   when: debian12cis_rules_5_1_1
+# 5.1.2 Ensure permissions on SSH private host key files are configured
+# An SSH private key is one of two files used in SSH public key authentication.
+# In this authentication method, the possession of the private key is proof of identity.
+# Only a private key that corresponds to a public key will be able to authenticate successfully. The private keys need to be stored and handled carefully, and no copies of the private key should be distributed.
+# If an unauthorized user obtains the private SSH host key file, the host could be
+# impersonated
+- name: 5.1.2 Ensure permissions on SSH private host key files are configured
+  block:
+    - name: 5.1.2 Ensure permissions on SSH private host key files are configured - find keys
+      shell: |
+        find /etc/ssh -xdev -type f -name 'ssh_host_*_key' && true || true
+      register: output_5_1_2
+      changed_when: output_5_1_2.rc != 0
+      check_mode: no
+    - name: 5.1.2 Ensure permissions on SSH private host key files are configured - fix permissions
+      file:
+        dest: "{{ item }}"
+        state: file
+        owner: root
+        group: root
+        mode: 0600
+      with_items: "{{ output_5_1_2.stdout_lines }}"
+      when: output_5_1_2.stdout_lines | length > 0
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.2
+    - scored
+  when: debian12cis_rules_5_1_2
 # 5.1.10 Ensure sshd HostbasedAuthentication is disabled
 # The HostbasedAuthentication parameter specifies if authentication is allowed through trusted hosts via the user of .rhosts , or /etc/hosts.equiv , along with successful public key client host authentication.
 # Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf , disabling the ability to use .rhosts files in SSH provides an additional layer of protection.
@@ -234,33 +264,6 @@
     - section5
     - level_5_server
     - level_5_workstation
-    - 5.2.2
-    - scored
-  when: debian12cis_rules_5_2_2
-# 5.2.2 Ensure permissions on SSH private host key files are configured
-# If an unauthorized user obtains the private SSH host key file, the host could be
-# impersonated
-- name: 5.2.2 Ensure permissions on SSH private host key files are configured
-  block:
-    - name: 5.2.2 Ensure permissions on SSH private host key files are configured - find keys
-      shell: |
-        find /etc/ssh -xdev -type f -name 'ssh_host_*_key' && true || true
-      register: output_5_2_2
-      changed_when: output_5_2_2.rc != 0
-      check_mode: no
-    - name: 5.2.2 Ensure permissions on SSH private host key files are configured - fix permissions
-      file:
-        dest: "{{ item }}"
-        state: file
-        owner: root
-        group: root
-        mode: 0600
-      with_items: "{{ output_5_2_2.stdout_lines }}"
-      when: output_5_2_2.stdout_lines | length > 0
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
     - 5.2.2
     - scored
   when: debian12cis_rules_5_2_2
