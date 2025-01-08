@@ -151,6 +151,23 @@
     - 5.1.18
     - scored
   when: debian12cis_rules_5_1_18
+# 5.1.19 Ensure sshd PermitEmptyPasswords is disabled
+# The PermitEmptyPasswords parameter specifies if the SSH server allows login to accounts with empty password strings.
+# Disallowing remote shell access to accounts that have an empty password reduces the
+# probability of unauthorized access to the system
+- name: 5.1.19 Ensure sshd PermitEmptyPasswords is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^(#)?PermitEmptyPasswords"
+    line: "PermitEmptyPasswords no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.19
+    - scored
+  when: debian12cis_rules_5_1_19
 # 5.1.20 Ensure sshd PermitRootLogin is disabled
 # Disallowing root logins over SSH requires system admins to authenticate using their own
 # individual account, then escalating to root via sudo or su . This in turn limits opportunity for
@@ -288,22 +305,7 @@
     - 5.2.6
     - scored
   when: debian12cis_rules_5_2_6
-# 5.2.11 Ensure SSH PermitEmptyPasswords is disabled
-# Disallowing remote shell access to accounts that have an empty password reduces the
-# probability of unauthorized access to the system
-- name: 5.2.11 Ensure SSH PermitEmptyPasswords is disabled
-  lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "^(#)?PermitEmptyPasswords"
-    line: "PermitEmptyPasswords no"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.2.11
-    - scored
-  when: debian12cis_rules_5_2_11
+
 # 5.2.12 Ensure SSH PermitUserEnvironment is disabled
 # Permitting users the ability to set environment variables through the SSH daemon could
 # potentially allow users to bypass security controls (e.g. setting an execution path that has
