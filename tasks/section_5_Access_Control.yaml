@@ -530,6 +530,44 @@
     - 5.2.5
     - scored
   when: debian12cis_rules_5_2_5
+# 5.2.6 Ensure sudo authentication timeout is configured correctly
+# sudo caches used credentials for a default of 15 minutes.
+# This is for ease of use when there are multiple administrative tasks to perform. The timeout can be modified to suit local security policies.
+# Setting a timeout value reduces the window of opportunity for unauthorized privileged access to another user.
+- name: 5.2.6 Ensure sudo authentication timeout is configured correctly
+  debug:
+    msg: To be implemented
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.2.6
+    - scored
+  when: debian12cis_rules_5_2_6
+# 5.2.7 Ensure access to the su command is restricted
+# The su command allows a user to run a command or shell as another user.
+# The program has been superseded by sudo, which allows for more granular control over privileged access.
+# Normally, the su command can be executed by any user. By uncommenting the pam_wheel.so statement in /etc/pam.d/su, the su command will only allow users in a specific groups to execute su.
+# This group should be empty to reinforce the use of sudo for privileged access.
+- name: 5.2.7 Ensure access to the su command is restricted
+  block:
+    - name: 5.2.7 Ensure access to the su command is restricted - groupadd
+      group:
+        name: sugroup
+        state: present
+    - name: 5.2.7 Ensure access to the su command is restricted - change
+      lineinfile:
+        state: present
+        dest: /etc/pam.d/su
+        regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
+        line: "auth required pam_wheel.so use_uid group=sugroup"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.2.7
+    - scored
+  when: debian12cis_rules_5_2_7
 # 5.2.4 Ensure SSH Protocol is not set to 1
 # SSH v1 suffers from insecurities that do not affect SSH v2.
 - name: 5.2.4 Ensure SSH Protocol is not set to 1
@@ -949,27 +987,3 @@
     - manual_setup
     - not-scored
   when: debian12cis_rules_5_5
-# 5.6 Ensure access to the su command is restricted
-# Restricting the use of su , and using sudo in its place, provides system administrators better
-# control of the escalation of user privileges to execute privileged commands. The sudo utility
-# also provides a better logging and audit mechanism, as it can log each command executed
-# via sudo, whereas su can only record that a user executed the su program.
-- name: 5.6 Ensure access to the su command is restricted
-  block:
-    - name: 5.6 Ensure access to the su command is restricted -groupadd
-      group:
-        name: sugroup
-        state: present
-    - name: 5.6 Ensure access to the su command is restricted - change
-      lineinfile:
-        state: present
-        dest: /etc/pam.d/su
-        regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
-        line: "auth required pam_wheel.so use_uid group=sugroup"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - "5.6"
-    - scored
-  when: debian12cis_rules_5_6
