@@ -489,6 +489,47 @@
     - 5.2.4
     - scored
   when: debian12cis_rules_5_2_4
+# 5.2.5 Ensure re-authentication for privilege escalation is not disabled globally
+# The operating system must be configured so that users must re-authenticate for privilege escalation.
+# Without re-authentication, users may access resources or perform tasks for which they do not have authorization.
+# When operating systems provide the capability to escalate a functional capability, it is critical the user re-authenticate.
+- name: 5.2.5 Ensure re-authentication for privilege escalation is not disabled globally
+  become: true
+  block:
+    - name: 5.2.5 Ensure re-authentication for privilege escalation is not disabled globally - Ensure /etc/sudoers has no NOPASSWD entries
+      shell: |
+        sed -i '/^[[:space:]]*\([^#[:space:]]\+.*\)\<!authenticate\>.*/Id' /etc/sudoers
+      args:
+        warn: false
+      register: sudoers_mod
+      changed_when: sudoers_mod.stdout != ""
+
+    - name: 5.2.5 Ensure re-authentication for privilege escalation is not disabled globally - Find files in /etc/sudoers.d
+      find:
+        paths: /etc/sudoers.d
+        file_type: file
+      register: sudoers_d_files
+
+    - name: 5.2.5 Ensure re-authentication for privilege escalation is not disabled globally - Ensure !authenticate entries are removed from /etc/sudoers.d files
+      lineinfile:
+        path: "{{ item.path }}"
+        state: absent
+        regexp: "(?i)^[[:space:]]*([^#\n\r]+[[:space:]]*)?\\b!authenticate\\b(.*)?$"
+      loop: "{{ sudoers_d_files.files }}"
+      when: sudoers_d_files.matched > 0
+
+    - name: 5.2.5 Ensure re-authentication for privilege escalation is not disabled globally - Validate sudoers configuration
+      command: visudo -cf /etc/sudoers
+      register: visudo_check
+      changed_when: false
+      failed_when: visudo_check.rc != 0
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.2.5
+    - scored
+  when: debian12cis_rules_5_2_5
 # 5.2.4 Ensure SSH Protocol is not set to 1
 # SSH v1 suffers from insecurities that do not affect SSH v2.
 - name: 5.2.4 Ensure SSH Protocol is not set to 1
