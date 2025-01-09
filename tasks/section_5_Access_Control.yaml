@@ -568,20 +568,20 @@
     - 5.2.7
     - scored
   when: debian12cis_rules_5_2_7
-# 5.3.1.1 Ensure latest version of pam is installed
-# Updated versions of PAM include additional functionality
-# To ensure the system has full functionality and access to the options covered by this Benchmark the latest version of libpam-runtime should be installed on the system
-- name: 5.3.1.1 Ensure latest version of pam is installed
+# 5.3.1.2 Ensure libpam-modules is installed
+# Pluggable Authentication Modules for PAM
+# To ensure the system has full functionality and access to the PAM options covered by this Benchmark
+- name: 5.3.1.2 Ensure libpam-modules is installed
   apt:
-    name: libpam-runtime
+    name: libpam-modules
     state: latest
   tags:
     - section5
     - level_1_server
     - level_1_workstation
-    - 5.3.1.1
+    - 5.3.1.2
     - scored
-  when: debian12cis_rules_5_3_1_1
+  when: debian12cis_rules_5_3_1_2
 # 5.2.4 Ensure SSH Protocol is not set to 1
 # SSH v1 suffers from insecurities that do not affect SSH v2.
 - name: 5.2.4 Ensure SSH Protocol is not set to 1
