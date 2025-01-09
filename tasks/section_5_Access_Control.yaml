@@ -448,6 +448,47 @@
     - 5.2.3
     - scored
   when: debian12cis_rules_5_2_3
+# 5.2.4 Ensure users must provide password for privilege escalation
+# The operating system must be configured so that users must provide a password for privilege escalation.
+# Without (re-)authentication, users may access resources or perform tasks for which they do not have authorization.
+# When operating systems provide the capability to escalate a functional capability, it is critical the user (re-)authenticate.
+- name: 5.2.4 Ensure users must provide password for privilege escalation
+  become: true
+  block:
+    - name: 5.2.4 Ensure users must provide password for privilege escalation - Ensure /etc/sudoers has no NOPASSWD entries
+      shell: |
+        sed -i '/^[[:space:]]*\([^#[:space:]]\+.*\)\<NOPASSWD\>.*/Id' /etc/sudoers
+      args:
+        warn: false
+      register: sudoers_mod
+      changed_when: sudoers_mod.stdout != ""
+
+    - name: 5.2.4 Ensure users must provide password for privilege escalation - Find files in /etc/sudoers.d
+      find:
+        paths: /etc/sudoers.d
+        file_type: file
+      register: sudoers_d_files
+
+    - name: 5.2.4 Ensure users must provide password for privilege escalation - Ensure NOPASSWD entries are removed from /etc/sudoers.d files
+      lineinfile:
+        path: "{{ item.path }}"
+        state: absent
+        regexp: "(?i)^[[:space:]]*([^#\n\r]+[[:space:]]*)?\\bNOPASSWD\\b(.*)?$"
+      loop: "{{ sudoers_d_files.files }}"
+      when: sudoers_d_files.matched > 0
+
+    - name: 5.2.4 Ensure users must provide password for privilege escalation - Validate sudoers configuration
+      command: visudo -cf /etc/sudoers
+      register: visudo_check
+      changed_when: false
+      failed_when: visudo_check.rc != 0
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.2.4
+    - scored
+  when: debian12cis_rules_5_2_4
 # 5.2.4 Ensure SSH Protocol is not set to 1
 # SSH v1 suffers from insecurities that do not affect SSH v2.
 - name: 5.2.4 Ensure SSH Protocol is not set to 1
